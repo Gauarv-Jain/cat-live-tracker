@@ -1,15 +1,14 @@
 import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
+import answerKeyData from "../../server/answerKey.json";
 
 const socket = io("http://192.168.1.7:3001");
-
-const TOTAL_QUESTIONS = 68;
-const MCQ_END = 50;
 
 function App() {
   const [name, setName] = useState("");
   const [joined, setJoined] = useState(false);
   const [answers, setAnswers] = useState({});
+  const [answerKey, setAnswerKey] = useState(answerKeyData);
 
   /*
   ==============================
@@ -133,15 +132,19 @@ function App() {
   ==============================
   */
 
+  const questionIds = Object.keys(answerKey).map(Number).sort((a, b) => a - b);
+
+  console.log("Rendering questions:", questionIds.length, "answerKey:", answerKey);
+
   return (
     <div style={{ padding: 20 }}>
-      <h1>CAT Tracker - 68 Questions</h1>
+      <h1>CAT Tracker - {questionIds.length} Questions</h1>
 
-      {/* MCQ QUESTIONS (1-50) */}
+      {questionIds.map((qid) => {
+        const question = answerKey[qid];
+        if (!question) return null;
 
-      <div>
-        <h2>MCQ Questions (1-50)</h2>
-        {Array.from({ length: MCQ_END }, (_, i) => i + 1).map((qid) => (
+        return (
           <div
             key={qid}
             style={{
@@ -150,76 +153,61 @@ function App() {
               border: "1px solid #ccc",
             }}
           >
-            <h3>Question {qid}</h3>
-            <div>
-              {["A", "B", "C", "D"].map((opt) => (
-                <button
-                  key={opt}
-                  onClick={() => {
-                    submitAnswer(qid, opt);
+            <h3>Question {qid} ({question.type})</h3>
+
+            {question.type === "MCQ" ? (
+              <div>
+                {["A", "B", "C", "D"].map((opt) => (
+                  <button
+                    key={opt}
+                    onClick={() => {
+                      submitAnswer(qid, opt);
+                    }}
+                    style={{
+                      marginRight: 10,
+                      padding: 8,
+                      background:
+                        answers[qid] === opt
+                          ? "#d0d0ff"
+                          : "#fff",
+                      border: "1px solid #999",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {opt}
+                  </button>
+                ))}
+                {answers[qid] && (
+                  <span style={{ marginLeft: 20, fontWeight: "bold" }}>
+                    Selected: {answers[qid]}
+                  </span>
+                )}
+              </div>
+            ) : (
+              <div>
+                <input
+                  type="number"
+                  placeholder="Enter Integer"
+                  value={answers[qid] || ""}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    submitAnswer(qid, value);
                   }}
                   style={{
-                    marginRight: 10,
                     padding: 8,
-                    background:
-                      answers[qid] === opt
-                        ? "#d0d0ff"
-                        : "#fff",
-                    border: "1px solid #999",
-                    cursor: "pointer",
+                    fontSize: 16,
                   }}
-                >
-                  {opt}
-                </button>
-              ))}
-              {answers[qid] && (
-                <span style={{ marginLeft: 20, fontWeight: "bold" }}>
-                  Selected: {answers[qid]}
-                </span>
-              )}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {/* TITA QUESTIONS (51-68) */}
-
-      <div>
-        <h2>TITA Questions (51-68)</h2>
-        {Array.from(
-          { length: TOTAL_QUESTIONS - MCQ_END },
-          (_, i) => MCQ_END + i + 1
-        ).map((qid) => (
-          <div
-            key={qid}
-            style={{
-              marginBottom: 20,
-              padding: 10,
-              border: "1px solid #ccc",
-            }}
-          >
-            <h3>Question {qid}</h3>
-            <input
-              type="number"
-              placeholder="Enter Integer"
-              value={answers[qid] || ""}
-              onChange={(e) => {
-                const value = e.target.value;
-                submitAnswer(qid, value);
-              }}
-              style={{
-                padding: 8,
-                fontSize: 16,
-              }}
-            />
-            {answers[qid] && (
-              <span style={{ marginLeft: 20, fontWeight: "bold" }}>
-                Answer: {answers[qid]}
-              </span>
+                />
+                {answers[qid] && (
+                  <span style={{ marginLeft: 20, fontWeight: "bold" }}>
+                    Answer: {answers[qid]}
+                  </span>
+                )}
+              </div>
             )}
           </div>
-        ))}
-      </div>
+        );
+      })}
     </div>
   );
 }
