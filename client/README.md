@@ -33,7 +33,17 @@ Open the **Network** URL printed by Vite. If port `5173` is already in use, Vite
 
 On your phone, open the Vite **Network** URL while connected to the same Wi-Fi as your computer. Do not use `localhost` on the phone; that points to the phone itself. The app connects to the backend on port `3001` using the same computer address as the page.
 
-If the phone cannot load the page, allow Node.js through Windows Firewall on private networks. Guest Wi-Fi networks may block devices from connecting to each other.
+### Windows network and firewall
+
+For a trusted home Wi-Fi network, set its Windows network profile to **Private**:
+
+1. Open **Settings > Network & internet > Wi-Fi**.
+2. Select the connected Wi-Fi network.
+3. Under **Network profile type**, select **Private**. Do this only for a network you trust; leave public or guest Wi-Fi set to **Public**.
+4. Open **Windows Security > Firewall & network protection > Allow an app through firewall**.
+5. Select **Change settings**, find **Node.js JavaScript Runtime**, and allow it on **Private** networks only. If it is not listed, choose **Allow another app** and browse to `C:\Program Files\nodejs\node.exe`.
+
+Keep Windows Firewall enabled. Allowing Node.js on the trusted Private profile is preferable to turning the firewall off. If access still fails, check that the Wi-Fi does not use guest mode or device/AP isolation.
 
 ## Pages
 
@@ -41,6 +51,23 @@ If the phone cannot load the page, allow Node.js through Windows Firewall on pri
 - Live dashboard: add `?admin` to the URL, for example `http://192.168.1.11:5174/?admin`. Replace the example address and port with Vite's current **Network** URL.
 
 The dashboard is not password-protected. Only share it on a trusted network.
+
+## Configure sections and numbering
+
+Set the `_config` object at the top of `server/answerKey.json`:
+
+```json
+"_config": {
+	"numbering": "restart",
+	"sections": [
+		{ "name": "VARC", "count": 24 },
+		{ "name": "QUANT", "count": 22 },
+		{ "name": "DILR", "count": 22 }
+	]
+}
+```
+
+Sections appear in the listed order and each `count` assigns that many following answer entries to the section. Use `"numbering": "restart"` to number each section from 1, or `"numbering": "continuous"` to keep numbering across section boundaries. The answer entries themselves remain globally numbered in paper order so submitted answers and scoring stay uniquely identified. This paper is configured for restarting numbering in each section.
 
 ## Troubleshooting
 

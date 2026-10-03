@@ -1,4 +1,12 @@
 {
+  "_config": {
+    "numbering": "restart",
+    "sections": [
+      { "name": "VARC", "count": 24 },
+      { "name": "DILR", "count": 22 },
+      { "name": "QUANT", "count": 22 }
+    ]
+  },
   "1": { "type": "MCQ", "correct": "D" },
   "2": { "type": "MCQ", "correct": "A" },
   "3": { "type": "MCQ", "correct": "D" },
