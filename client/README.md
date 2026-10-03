@@ -54,20 +54,31 @@ The dashboard is not password-protected. Only share it on a trusted network.
 
 ## Configure sections and numbering
 
-Set the `_config` object at the top of `server/answerKey.json`:
+Group answers by section under `sections`. Question numbers restart within each section, while `_config.sectionOrder` controls how sections appear:
 
 ```json
-"_config": {
-	"numbering": "restart",
-	"sections": [
-		{ "name": "VARC", "count": 24 },
-		{ "name": "QUANT", "count": 22 },
-		{ "name": "DILR", "count": 22 }
-	]
+{
+	"_config": {
+		"numbering": "restart",
+		"sectionOrder": ["VARC", "DILR", "QUANT"],
+		"legacyQuestionOrder": ["VARC", "DILR", "QUANT"]
+	},
+	"sections": {
+		"VARC": {
+			"1": { "type": "MCQ", "correct": "D" },
+			"2": { "type": "MCQ", "correct": "A" }
+		},
+		"DILR": {
+			"1": { "type": "MCQ", "correct": "C" }
+		},
+		"QUANT": {
+			"1": { "type": "TITA", "correct": 30 }
+		}
+	}
 }
 ```
 
-Sections appear in the listed order and each `count` assigns that many following answer entries to the section. Use `"numbering": "restart"` to number each section from 1, or `"numbering": "continuous"` to keep numbering across section boundaries. The answer entries themselves remain globally numbered in paper order so submitted answers and scoring stay uniquely identified. This paper is configured for restarting numbering in each section.
+Change only the names/order in `_config.sectionOrder` to rearrange sections; the answer sets stay attached to their names. Use `"numbering": "restart"` to restart visible numbering in each section or `"numbering": "continuous"` to continue it across sections. Keep `legacyQuestionOrder` unchanged when reordering; it preserves the mapping for answers saved by older versions of the app. This paper uses restarting numbering.
 
 ## Troubleshooting
 

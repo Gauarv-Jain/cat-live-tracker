@@ -8,34 +8,22 @@ const socket = io(`http://${window.location.hostname}:3001`, {
 });
 
 function buildSections(key) {
-  const questionIds = Object.keys(key)
-    .filter((questionId) => /^\d+$/.test(questionId))
-    .map(Number)
-    .sort((first, second) => first - second);
-  const configuredSections = key._config?.sections ?? [];
-
-  if (configuredSections.length === 0) {
-    return [{ name: "Questions", questionIds, startNumber: 1 }];
-  }
-
+  const sectionNames = key._config?.sectionOrder ?? Object.keys(key.sections ?? {});
   let offset = 0;
-  const sections = configuredSections.map(({ name, count }) => {
-    const sectionQuestionIds = questionIds.slice(offset, offset + count);
-    const startNumber = key._config.numbering === "restart" ? 1 : offset + 1;
-    offset += count;
 
-    return { name, questionIds: sectionQuestionIds, startNumber };
-  });
+  return sectionNames
+    .filter((name) => key.sections?.[name])
+    .map((name) => {
+      const questions = key.sections[name];
+      const questionIds = Object.keys(questions)
+        .map(Number)
+        .sort((first, second) => first - second);
+      const startNumber = key._config?.numbering === "restart" ? 1 : offset + 1;
+      const overallStart = offset + 1;
+      offset += questionIds.length;
 
-  if (offset < questionIds.length) {
-    sections.push({
-      name: "Other questions",
-      questionIds: questionIds.slice(offset),
-      startNumber: key._config.numbering === "restart" ? 1 : offset + 1,
+      return { name, questions, questionIds, startNumber, overallStart };
     });
-  }
-
-  return sections;
 }
 
 function getQuestionResult(answer, question) {
@@ -107,7 +95,10 @@ function Admin() {
                   {student.score ?? 0}<span>marks</span>
                 </p>
                 <p className="answered-count">
-                  {Object.keys(student.answers ?? {}).length} answered
+                  {Object.values(student.answers ?? {}).reduce(
+                    (count, sectionAnswers) => count + Object.keys(sectionAnswers).length,
+                    0
+                  )} answered
                 </p>
               </article>
             ))}
@@ -124,8 +115,11 @@ function Admin() {
         {sections.map((section) => {
           const sectionScores = participants.map((student) => {
             const score = section.questionIds.reduce((total, questionId) => {
-              const question = answerKey[questionId];
-              const result = getQuestionResult(student.answers?.[questionId], question);
+              const question = section.questions[questionId];
+              const result = getQuestionResult(
+                student.answers?.[section.name]?.[questionId],
+                question
+              );
               return total + result.points;
             }, 0);
 
@@ -164,16 +158,17 @@ function Admin() {
                     </thead>
                     <tbody>
                       {section.questionIds.map((questionId, index) => {
-                        const question = answerKey[questionId];
+                        const question = section.questions[questionId];
+                        const overallQuestionNumber = section.overallStart + index;
 
                         return (
                           <tr key={questionId}>
                             <th className="question-column" scope="row">
-                              <strong>Q{section.startNumber + index} / Q{questionId}</strong>
+                              <strong>Q{section.startNumber + index} / Q{overallQuestionNumber}</strong>
                               <small>{question.type} | Key {question.correct}</small>
                             </th>
                             {participants.map((student) => {
-                              const answer = student.answers?.[questionId];
+                              const answer = student.answers?.[section.name]?.[questionId];
                               const result = getQuestionResult(answer, question);
                               const resultClass = !result.attempted
                                 ? "unattempted"

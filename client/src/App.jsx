@@ -4,6 +4,56 @@ import answerKeyData from "../../server/answerKey.json";
 
 const socket = io(`http://${window.location.hostname}:3001`);
 
+function getSections(key) {
+  const sectionNames = key._config?.sectionOrder ?? Object.keys(key.sections ?? {});
+  let questionOffset = 0;
+
+  return sectionNames
+    .filter((sectionName) => key.sections?.[sectionName])
+    .map((name) => {
+      const questions = key.sections[name];
+      const questionIds = Object.keys(questions)
+        .map(Number)
+        .sort((first, second) => first - second);
+      const startNumber = key._config?.numbering === "restart" ? 1 : questionOffset + 1;
+      const overallStart = questionOffset + 1;
+      questionOffset += questionIds.length;
+
+      return { name, questions, questionIds, startNumber, overallStart };
+    });
+}
+
+function normalizeSavedAnswers(savedAnswers, key) {
+  if (!savedAnswers || typeof savedAnswers !== "object") return {};
+
+  const sectionNames = key._config?.legacyQuestionOrder
+    ?? key._config?.sectionOrder
+    ?? Object.keys(key.sections ?? {});
+  const hasSectionAnswers = Object.keys(key.sections ?? {}).some(
+    (sectionName) => savedAnswers[sectionName] && typeof savedAnswers[sectionName] === "object"
+  );
+  if (hasSectionAnswers) return savedAnswers;
+
+  const normalized = {};
+  let overallQuestionId = 1;
+
+  for (const sectionName of sectionNames) {
+    const questionIds = Object.keys(key.sections?.[sectionName] ?? {})
+      .map(Number)
+      .sort((first, second) => first - second);
+    normalized[sectionName] = {};
+
+    for (const questionId of questionIds) {
+      if (Object.hasOwn(savedAnswers, overallQuestionId)) {
+        normalized[sectionName][questionId] = savedAnswers[overallQuestionId];
+      }
+      overallQuestionId += 1;
+    }
+  }
+
+  return normalized;
+}
+
 function App() {
   const [name, setName] = useState("");
   const [joined, setJoined] = useState(false);
@@ -20,9 +70,10 @@ function App() {
     const saved = localStorage.getItem("studentSession");
     if (saved) {
       const session = JSON.parse(saved);
+      const restoredAnswers = normalizeSavedAnswers(session.answers, answerKeyData);
       setName(session.name || "");
       setJoined(session.joined || false);
-      setAnswers(session.answers || {});
+      setAnswers(restoredAnswers);
 
       if (session.joined && session.name) {
         socket.emit("join-test", {
@@ -30,13 +81,16 @@ function App() {
         });
 
         // Re-emit all saved answers to backend
-        if (session.answers && Object.keys(session.answers).length > 0) {
+        if (Object.keys(restoredAnswers).length > 0) {
           setTimeout(() => {
-            Object.entries(session.answers).forEach(
-              ([qid, answer]) => {
-                socket.emit("answer-update", {
-                  qid: parseInt(qid),
-                  answer,
+            Object.entries(restoredAnswers).forEach(
+              ([section, sectionAnswers]) => {
+                Object.entries(sectionAnswers).forEach(([qid, answer]) => {
+                  socket.emit("answer-update", {
+                    section,
+                    qid: Number(qid),
+                    answer,
+                  });
                 });
               }
             );
@@ -82,23 +136,26 @@ function App() {
   ==============================
   */
 
-  const submitAnswer = (qid, answer) => {
+  const submitAnswer = (section, qid, answer) => {
     console.log("Submitting answer:", {
+      section,
       qid,
       answer,
     });
 
     socket.emit("answer-update", {
+      section,
       qid,
       answer,
     });
 
-    const updatedAnswers = { ...answers };
+    const updatedSectionAnswers = { ...(answers[section] ?? {}) };
     if (!answer) {
-      delete updatedAnswers[qid];
+      delete updatedSectionAnswers[qid];
     } else {
-      updatedAnswers[qid] = answer;
+      updatedSectionAnswers[qid] = answer;
     }
+    const updatedAnswers = { ...answers, [section]: updatedSectionAnswers };
     setAnswers(updatedAnswers);
     saveSession({ name, joined, answers: updatedAnswers });
   };
@@ -135,37 +192,25 @@ function App() {
   ==============================
   */
 
-  const questionIds = Object.keys(answerKey)
-    .filter((qid) => /^\d+$/.test(qid))
-    .map(Number)
-    .sort((a, b) => a - b);
-  const numberingMode = answerKey._config?.numbering ?? "continuous";
-  let questionOffset = 0;
-  const sections = answerKey._config?.sections?.length
-    ? answerKey._config.sections.map(({ name, count }) => {
-        const sectionQuestionIds = questionIds.slice(
-          questionOffset,
-          questionOffset + count
-        );
-        const startNumber = numberingMode === "restart" ? 1 : questionOffset + 1;
-        questionOffset += count;
-
-        return { name, questionIds: sectionQuestionIds, startNumber };
-      })
-    : [{ name: "Questions", questionIds, startNumber: 1 }];
-
-  console.log("Rendering questions:", questionIds.length, "answerKey:", answerKey);
+  const sections = getSections(answerKey);
+  const totalQuestions = sections.reduce(
+    (total, section) => total + section.questionIds.length,
+    0
+  );
 
   return (
     <div style={{ padding: 20 }}>
-      <h1>CAT Tracker - {questionIds.length} Questions</h1>
+      <h1>CAT Tracker - {totalQuestions} Questions</h1>
 
       {sections.map((section) => (
         <section key={section.name}>
           <h2 style={{ margin: "28px 0 14px" }}>{section.name}</h2>
           {section.questionIds.map((qid, index) => {
-            const question = answerKey[qid];
+            const question = section.questions[qid];
             if (!question) return null;
+            const localNumber = section.startNumber + index;
+            const overallNumber = section.overallStart + index;
+            const answer = answers[section.name]?.[qid];
 
             return (
               <div
@@ -176,7 +221,11 @@ function App() {
                   border: "1px solid #ccc",
                 }}
               >
-                <h3>Question {section.startNumber + index} ({question.type})</h3>
+                <h3>
+                  Question {localNumber}
+                  {localNumber !== overallNumber && ` (Overall ${overallNumber})`}
+                  {` (${question.type})`}
+                </h3>
 
                 {question.type === "MCQ" ? (
                   <div>
@@ -184,14 +233,14 @@ function App() {
                       <button
                         key={opt}
                         onClick={() => {
-                          const newAnswer = answers[qid] === opt ? "" : opt;
-                          submitAnswer(qid, newAnswer);
+                          const newAnswer = answer === opt ? "" : opt;
+                          submitAnswer(section.name, qid, newAnswer);
                         }}
                         style={{
                           marginRight: 10,
                           padding: 8,
                           background:
-                            answers[qid] === opt
+                            answer === opt
                               ? "#d0d0ff"
                               : "#fff",
                           border: "1px solid #999",
@@ -201,9 +250,9 @@ function App() {
                         {opt}
                       </button>
                     ))}
-                    {answers[qid] && (
+                    {answer && (
                       <span style={{ marginLeft: 20, fontWeight: "bold" }}>
-                        Selected: {answers[qid]}
+                        Selected: {answer}
                       </span>
                     )}
                   </div>
@@ -212,19 +261,19 @@ function App() {
                     <input
                       type="number"
                       placeholder="Enter Integer"
-                      value={answers[qid] || ""}
+                      value={answer || ""}
                       onChange={(e) => {
                         const value = e.target.value;
-                        submitAnswer(qid, value);
+                        submitAnswer(section.name, qid, value);
                       }}
                       style={{
                         padding: 8,
                         fontSize: 16,
                       }}
                     />
-                    {answers[qid] && (
+                    {answer && (
                       <span style={{ marginLeft: 20, fontWeight: "bold" }}>
-                        Answer: {answers[qid]}
+                        Answer: {answer}
                       </span>
                     )}
                   </div>
