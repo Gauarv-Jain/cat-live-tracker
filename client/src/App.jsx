@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import answerKeyData from "../../server/answerKey.json";
 
-const socket = io("http://192.168.1.7:3001");
+const socket = io(`http://${window.location.hostname}:3001`);
 
 function App() {
   const [name, setName] = useState("");
@@ -83,8 +83,6 @@ function App() {
   */
 
   const submitAnswer = (qid, answer) => {
-    if (!answer) return;
-
     console.log("Submitting answer:", {
       qid,
       answer,
@@ -95,7 +93,12 @@ function App() {
       answer,
     });
 
-    const updatedAnswers = { ...answers, [qid]: answer };
+    const updatedAnswers = { ...answers };
+    if (!answer) {
+      delete updatedAnswers[qid];
+    } else {
+      updatedAnswers[qid] = answer;
+    }
     setAnswers(updatedAnswers);
     saveSession({ name, joined, answers: updatedAnswers });
   };
@@ -161,7 +164,8 @@ function App() {
                   <button
                     key={opt}
                     onClick={() => {
-                      submitAnswer(qid, opt);
+                      const newAnswer = answers[qid] === opt ? "" : opt;
+                      submitAnswer(qid, newAnswer);
                     }}
                     style={{
                       marginRight: 10,

@@ -71,6 +71,7 @@ SOCKET CONNECTIONS
 
 io.on("connection", (socket) => {
   console.log("User connected");
+  socket.emit("live-update", students);
 
   /*
   ==============================
@@ -130,10 +131,16 @@ io.on("connection", (socket) => {
       `Answer from ${student.name}: Q${qid} = ${answer}`
     );
 
-    student.answers = {
-      ...student.answers,
-      [qid]: answer,
-    };
+    if (!answer) {
+      // Remove the answer if empty (unselecting)
+      delete student.answers[qid];
+    } else {
+      // Set the answer
+      student.answers = {
+        ...student.answers,
+        [qid]: answer,
+      };
+    }
 
     student.score = calculateScore(
       student.answers

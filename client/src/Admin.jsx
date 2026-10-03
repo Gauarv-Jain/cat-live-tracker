@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import { io } from "socket.io-client";
 
-const socket = io("http://192.168.1.7:3001");
+const socket = io(`http://${window.location.hostname}:3001`);
 
 function Admin() {
   const [students, setStudents] =
