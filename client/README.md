@@ -13,6 +13,11 @@ In terminal 1, start the backend:
 
 ```powershell
 cd server
+node index.js
+```
+
+```powershell
+cd server
 npm install
 node index.js
 ```
@@ -20,6 +25,11 @@ node index.js
 The backend listens on port `3001`. Leave this terminal running.
 
 In terminal 2, start the frontend so other devices on your network can reach it:
+
+```powershell
+cd client
+npm run dev -- --host 0.0.0.0
+```
 
 ```powershell
 cd client
