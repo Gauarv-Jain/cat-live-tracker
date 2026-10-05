@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import answerKey from "../../server/answerKey.json";
 import ThemeToggle from "./ThemeToggle.jsx";
@@ -135,8 +135,40 @@ function AttemptSummary({ stats, compact = false }) {
   );
 }
 
+function animateRankChange(card, currentRect, previousRect, previousRank, rank, reduceMotion) {
+  if (!reduceMotion && previousRect && typeof card.animate === "function") {
+    const deltaX = previousRect.left - currentRect.left;
+    const deltaY = previousRect.top - currentRect.top;
+
+    if (Math.abs(deltaX) > 1 || Math.abs(deltaY) > 1) {
+      card.animate(
+        [
+          { transform: `translate(${deltaX}px, ${deltaY}px)` },
+          { transform: "translate(0, 0)" },
+        ],
+        { duration: 360, easing: "cubic-bezier(0.2, 0.75, 0.25, 1)" }
+      );
+    }
+  }
+
+  if (!reduceMotion && previousRank !== undefined && previousRank !== rank) {
+    card.classList.remove("rank-overtake");
+    void card.offsetWidth;
+    card.classList.add("rank-overtake");
+    card.addEventListener("animationend", (event) => {
+      if (event.target === card) card.classList.remove("rank-overtake");
+    }, { once: true });
+  }
+}
+
 function Admin() {
   const [students, setStudents] = useState({});
+  const rankingCards = useRef(new Map());
+  const previousPositions = useRef(new Map());
+  const previousRanks = useRef(new Map());
+  const sectionRankingCards = useRef(new Map());
+  const previousSectionPositions = useRef(new Map());
+  const previousSectionRanks = useRef(new Map());
   const sections = buildSections(answerKey);
   const participants = Object.values(students).sort(
     (first, second) => (second.score ?? 0) - (first.score ?? 0)
@@ -144,6 +176,70 @@ function Admin() {
     ...student,
     stats: getStudentStats(student, sections),
   })).sort((first, second) => second.stats.score - first.stats.score);
+  const sectionRankings = sections.map((section) => ({
+    section,
+    rankings: participants.map((student) => ({
+      student,
+      stats: getStudentStats(student, [section]),
+    })).sort((first, second) => second.stats.score - first.stats.score),
+  }));
+
+  useLayoutEffect(() => {
+    const nextPositions = new Map();
+    const nextRanks = new Map();
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    participants.forEach((student, index) => {
+      const studentId = student.id ?? student.name;
+      const card = rankingCards.current.get(studentId);
+      if (!card) return;
+
+      const rank = index + 1;
+      const currentRect = card.getBoundingClientRect();
+      const previousRect = previousPositions.current.get(studentId);
+      const previousRank = previousRanks.current.get(studentId);
+      animateRankChange(card, currentRect, previousRect, previousRank, rank, reduceMotion);
+
+      nextPositions.set(studentId, {
+        left: currentRect.left,
+        top: currentRect.top,
+      });
+      nextRanks.set(studentId, rank);
+    });
+
+    previousPositions.current = nextPositions;
+    previousRanks.current = nextRanks;
+  }, [participants]);
+
+  useLayoutEffect(() => {
+    const nextPositions = new Map();
+    const nextRanks = new Map();
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    sectionRankings.forEach(({ section, rankings }) => {
+      rankings.forEach(({ student }, index) => {
+        const studentId = student.id ?? student.name;
+        const rankingKey = JSON.stringify([section.name, studentId]);
+        const card = sectionRankingCards.current.get(rankingKey);
+        if (!card) return;
+
+        const rank = index + 1;
+        const currentRect = card.getBoundingClientRect();
+        const previousRect = previousSectionPositions.current.get(rankingKey);
+        const previousRank = previousSectionRanks.current.get(rankingKey);
+        animateRankChange(card, currentRect, previousRect, previousRank, rank, reduceMotion);
+
+        nextPositions.set(rankingKey, {
+          left: currentRect.left,
+          top: currentRect.top,
+        });
+        nextRanks.set(rankingKey, rank);
+      });
+    });
+
+    previousSectionPositions.current = nextPositions;
+    previousSectionRanks.current = nextRanks;
+  }, [sectionRankings]);
 
   useEffect(() => {
     const handleLiveUpdate = (data) => setStudents(data);
@@ -180,7 +276,18 @@ function Admin() {
         ) : (
           <div className="total-grid">
             {participants.map((student, index) => (
-              <article className="total-card" key={student.id ?? student.name}>
+              <article
+                className="total-card"
+                key={student.id ?? student.name}
+                ref={(element) => {
+                  const studentId = student.id ?? student.name;
+                  if (element) {
+                    rankingCards.current.set(studentId, element);
+                  } else {
+                    rankingCards.current.delete(studentId);
+                  }
+                }}
+              >
                 <div className="total-card-heading">
                   <span className="rank-label">#{index + 1}</span>
                   <h3>{student.name}</h3>
@@ -201,14 +308,7 @@ function Admin() {
           <span>Expand a section to compare answers</span>
         </div>
 
-        {sections.map((section) => {
-          const sectionScores = participants.map((student) => {
-            return {
-              student,
-              stats: getStudentStats(student, [section]),
-            };
-          });
-
+        {sectionRankings.map(({ section, rankings }) => {
           return (
             <details className="section-details" key={section.name}>
               <summary>
@@ -217,15 +317,31 @@ function Admin() {
                   <small>{section.questionIds.length} questions</small>
                 </span>
                 <span className="section-score-list">
-                  {sectionScores.map(({ student, stats }) => (
-                    <span className="section-score" key={student.id ?? student.name}>
-                      <span className="section-score-heading">
-                        <span>{student.name}</span>
-                        <strong>{stats.score} marks</strong>
+                  {rankings.map(({ student, stats }, index) => {
+                    const studentId = student.id ?? student.name;
+                    const rankingKey = JSON.stringify([section.name, studentId]);
+
+                    return (
+                      <span
+                        className="section-score"
+                        key={studentId}
+                        ref={(element) => {
+                          if (element) {
+                            sectionRankingCards.current.set(rankingKey, element);
+                          } else {
+                            sectionRankingCards.current.delete(rankingKey);
+                          }
+                        }}
+                      >
+                        <span className="section-score-heading">
+                          <span className="section-rank">#{index + 1}</span>
+                          <span className="section-student-name">{student.name}</span>
+                          <strong>{stats.score} marks</strong>
+                        </span>
+                        <AttemptSummary stats={stats} />
                       </span>
-                      <AttemptSummary stats={stats} />
-                    </span>
-                  ))}
+                    );
+                  })}
                 </span>
               </summary>
 
