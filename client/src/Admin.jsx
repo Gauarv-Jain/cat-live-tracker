@@ -43,8 +43,75 @@ function getQuestionResult(answer, question) {
   return { attempted, correct, points };
 }
 
-function formatPoints(points) {
-  return `${points > 0 ? "+" : ""}${points} ${Math.abs(points) === 1 ? "mark" : "marks"}`;
+function getStudentStats(student, selectedSections) {
+  const stats = {
+    attempted: 0,
+    correct: 0,
+    incorrect: 0,
+    unattempted: 0,
+    score: 0,
+    total: 0,
+  };
+
+  for (const section of selectedSections) {
+    stats.total += section.questionIds.length;
+
+    for (const questionId of section.questionIds) {
+      const question = section.questions[questionId];
+      const answer = student.answers?.[section.name]?.[questionId];
+      const result = getQuestionResult(answer, question);
+      stats.score += result.points;
+
+      if (!result.attempted) continue;
+      stats.attempted += 1;
+      if (result.correct) {
+        stats.correct += 1;
+      } else {
+        stats.incorrect += 1;
+      }
+    }
+  }
+
+  stats.unattempted = stats.total - stats.attempted;
+  return stats;
+}
+
+function AttemptSummary({ stats }) {
+  const outcomes = [
+    { label: "Correct", value: stats.correct, className: "correct" },
+    { label: "Incorrect", value: stats.incorrect, className: "incorrect" },
+    { label: "Unattempted", value: stats.unattempted, className: "unattempted" },
+  ];
+
+  return (
+    <div className="attempt-summary">
+      <div className="attempted-total">
+        <span>Attempted</span>
+        <strong>{stats.attempted} / {stats.total}</strong>
+      </div>
+      <div className="attempt-bar" aria-hidden="true">
+        {outcomes.map((outcome) => (
+          <span
+            className={`attempt-segment ${outcome.className}`}
+            key={outcome.label}
+            style={{
+              width: `${stats.total ? (outcome.value / stats.total) * 100 : 0}%`,
+            }}
+          />
+        ))}
+      </div>
+      <div className="attempt-legend">
+        {outcomes.map((outcome, index) => (
+          <span className="attempt-legend-item" key={outcome.label}>
+            {outcome.label} <strong>{outcome.value}</strong>
+            {index < outcomes.length - 1 && (
+              <span className="attempt-separator" aria-hidden="true">·</span>
+            )}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
 }
 
 function Admin() {
@@ -52,7 +119,10 @@ function Admin() {
   const sections = buildSections(answerKey);
   const participants = Object.values(students).sort(
     (first, second) => (second.score ?? 0) - (first.score ?? 0)
-  );
+  ).map((student) => ({
+    ...student,
+    stats: getStudentStats(student, sections),
+  })).sort((first, second) => second.stats.score - first.stats.score);
 
   useEffect(() => {
     const handleLiveUpdate = (data) => setStudents(data);
@@ -92,14 +162,9 @@ function Admin() {
                 <span className="rank-label">#{index + 1}</span>
                 <h3>{student.name}</h3>
                 <p className="total-score">
-                  {student.score ?? 0}<span>marks</span>
+                  {student.stats.score}<span>marks</span>
                 </p>
-                <p className="answered-count">
-                  {Object.values(student.answers ?? {}).reduce(
-                    (count, sectionAnswers) => count + Object.keys(sectionAnswers).length,
-                    0
-                  )} answered
-                </p>
+                <AttemptSummary stats={student.stats} />
               </article>
             ))}
           </div>
@@ -114,16 +179,10 @@ function Admin() {
 
         {sections.map((section) => {
           const sectionScores = participants.map((student) => {
-            const score = section.questionIds.reduce((total, questionId) => {
-              const question = section.questions[questionId];
-              const result = getQuestionResult(
-                student.answers?.[section.name]?.[questionId],
-                question
-              );
-              return total + result.points;
-            }, 0);
-
-            return { student, score };
+            return {
+              student,
+              stats: getStudentStats(student, [section]),
+            };
           });
 
           return (
@@ -134,10 +193,13 @@ function Admin() {
                   <small>{section.questionIds.length} questions</small>
                 </span>
                 <span className="section-score-list">
-                  {sectionScores.map(({ student, score }) => (
+                  {sectionScores.map(({ student, stats }) => (
                     <span className="section-score" key={student.id ?? student.name}>
-                      <span>{student.name}</span>
-                      <strong>{score}</strong>
+                      <span className="section-score-heading">
+                        <span>{student.name}</span>
+                        <strong>{stats.score} marks</strong>
+                      </span>
+                      <AttemptSummary stats={stats} />
                     </span>
                   ))}
                 </span>
@@ -179,14 +241,16 @@ function Admin() {
                                   <div className={`answer-cell ${resultClass}`}>
                                     <span className="answer-status">
                                       {!result.attempted
-                                        ? "Not attempted"
+                                        ? "Unanswered"
                                         : result.correct ? "Correct" : "Incorrect"}
                                     </span>
-                                    <span className="answer-value">
-                                      Selected: {result.attempted ? answer : "-"}
-                                    </span>
-                                    <span className="answer-points">
-                                      {formatPoints(result.points)}
+                                    <span className="answer-detail">
+                                      <strong className="answer-value">
+                                        {result.attempted ? answer : "-"}
+                                      </strong>
+                                      <span className="answer-points">
+                                        {result.points > 0 ? "+" : ""}{result.points} pts
+                                      </span>
                                     </span>
                                   </div>
                                 </td>
