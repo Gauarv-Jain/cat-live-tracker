@@ -191,7 +191,10 @@
   --student-canvas: #f5f7f5;
   --student-accent: #176f62;
   --student-accent-soft: #e8f3ef;
-  --student-answered: #edf5ee;
+  --student-answered: #e7efe9;
+  --student-marked-ink: #355541;
+  --student-marked-background: #e7efe9;
+  --student-marked-border: #8aa293;
   box-sizing: border-box;
   width: 100%;
   min-height: 100svh;
@@ -200,6 +203,20 @@
   color: var(--student-ink);
   background: var(--student-canvas);
   text-align: left;
+}
+
+html[data-theme='dark'] .test-app {
+  --student-ink: #e8eaed;
+  --student-muted: #bdc1c6;
+  --student-line: #5f6368;
+  --student-paper: #303134;
+  --student-canvas: #202124;
+  --student-accent: #8ab4f8;
+  --student-accent-soft: #3c4043;
+  --student-answered: #3a423d;
+  --student-marked-ink: #d0dbd3;
+  --student-marked-background: #3a423d;
+  --student-marked-border: #829188;
 }
 
 .test-app * {
@@ -276,7 +293,7 @@
   width: 100%;
   min-height: 50px;
   padding: 10px 12px;
-  border: 1px solid #bac8bf;
+  border: 1px solid var(--student-line);
   border-radius: 5px;
   color: var(--student-ink);
   background: var(--student-paper);
@@ -388,7 +405,7 @@
   overflow: hidden;
   height: 5px;
   border-radius: 3px;
-  background: #dfe7e1;
+  background: var(--student-line);
 }
 
 .progress-track > span {
@@ -420,8 +437,8 @@
 }
 
 .desktop-question-card.answered {
-  border-color: #6fa681;
-  background: #e5f2e7;
+  border-color: var(--student-marked-border, #6fa681);
+  background: var(--student-marked-background, #e5f2e7);
 }
 
 .desktop-question-heading {
@@ -451,8 +468,8 @@
 .desktop-question-heading .marked-badge {
   padding: 2px 5px;
   border-radius: 3px;
-  color: #21633b;
-  background: #cfe7d3;
+  color: var(--student-marked-ink, #21633b);
+  background: var(--student-answered);
   font-size: 9px;
   font-weight: 750;
 }
@@ -520,16 +537,16 @@
 }
 
 .question-jump.answered {
-  border-color: #528864;
-  color: #17492a;
-  background: #cfe7d3;
+  border-color: var(--student-marked-border, #528864);
+  color: var(--student-marked-ink, #17492a);
+  background: var(--student-answered);
 }
 
 .question-marked-check {
   position: absolute;
   right: 3px;
   bottom: 1px;
-  color: #21633b;
+  color: var(--student-marked-ink, #21633b);
   font-size: 9px;
   line-height: 1;
 }
@@ -574,7 +591,7 @@
 .question-meta > span + span:not(.question-type)::before {
   content: "·";
   margin-right: 7px;
-  color: #98a59d;
+  color: var(--student-muted);
 }
 
 .question-type {

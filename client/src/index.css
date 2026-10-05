@@ -8,6 +8,7 @@
   --accent-bg: rgba(170, 59, 255, 0.1);
   --accent-border: rgba(170, 59, 255, 0.5);
   --social-bg: rgba(244, 243, 236, 0.5);
+  --app-shell: #f2f5f2;
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
@@ -17,7 +18,7 @@
 
   font: 18px/145% var(--sans);
   letter-spacing: 0.18px;
-  color-scheme: light dark;
+  color-scheme: light;
   color: var(--text);
   background: var(--bg);
   font-synthesis: none;
@@ -30,24 +31,20 @@
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+html[data-theme='dark'] {
+  --text: #bdc1c6;
+  --text-h: #e8eaed;
+  --bg: #202124;
+  --border: #5f6368;
+  --code-bg: #303134;
+  --accent: #8ab4f8;
+  --accent-bg: rgba(138, 180, 248, 0.14);
+  --accent-border: rgba(138, 180, 248, 0.5);
+  --social-bg: rgba(60, 64, 67, 0.8);
+  --app-shell: #202124;
+  --shadow:
+    rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+  color-scheme: dark;
 }
 
 body {
@@ -63,7 +60,56 @@ body {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
-  background: #f2f5f2;
+  background: var(--app-shell);
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text-h);
+  background: var(--bg);
+  font: 600 12px/1 var(--sans);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.theme-switch {
+  position: relative;
+  width: 32px;
+  height: 18px;
+  border-radius: 9px;
+  background: #aeb9b1;
+  transition: background-color 140ms ease;
+}
+
+.theme-switch > span {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: transform 140ms ease;
+}
+
+.theme-toggle[aria-pressed='true'] .theme-switch {
+  background: #287d69;
+}
+
+.theme-toggle[aria-pressed='true'] .theme-switch > span {
+  transform: translateX(14px);
 }
 
 h1,

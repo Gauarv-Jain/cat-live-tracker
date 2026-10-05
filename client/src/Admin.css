@@ -10,6 +10,9 @@
   --admin-red: #a64032;
   --admin-red-bg: #fff0ec;
   --admin-gray-bg: #f0f2f1;
+  --admin-unattempted: #8a9690;
+  --admin-table-head: #e8eeea;
+  --admin-question-bg: #f7f9f7;
   box-sizing: border-box;
   flex: 1;
   width: 100%;
@@ -17,6 +20,23 @@
   color: var(--admin-ink);
   background: var(--admin-canvas);
   text-align: left;
+}
+
+html[data-theme='dark'] .admin-page {
+  --admin-ink: #e8eaed;
+  --admin-muted: #bdc1c6;
+  --admin-line: #5f6368;
+  --admin-paper: #303134;
+  --admin-canvas: #202124;
+  --admin-teal: #8ab4f8;
+  --admin-green: #81c995;
+  --admin-green-bg: #254b30;
+  --admin-red: #f28b82;
+  --admin-red-bg: #5c2b2b;
+  --admin-gray-bg: #3c4043;
+  --admin-unattempted: #9aa0a6;
+  --admin-table-head: #3c4043;
+  --admin-question-bg: #303134;
 }
 
 .admin-page * {
@@ -89,8 +109,14 @@
   background: var(--admin-paper);
 }
 
+.total-card-heading {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+}
+
 .rank-label {
-  float: right;
   color: var(--admin-muted);
   font-size: 12px;
   font-weight: 700;
@@ -98,7 +124,8 @@
 
 .total-card h3 {
   overflow: hidden;
-  margin: 0 24px 8px 0;
+  min-width: 0;
+  margin: 0;
   color: var(--admin-ink);
   font-size: 15px;
   text-overflow: ellipsis;
@@ -132,6 +159,26 @@
   margin-top: 12px;
 }
 
+.attempt-summary.compact {
+  gap: 4px;
+}
+
+.compact-attempt-counts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 5px;
+  margin: 0;
+  color: var(--admin-muted);
+  font-size: 10px;
+  line-height: 1.25;
+}
+
+.compact-attempt-counts strong {
+  color: var(--admin-ink);
+  font-variant-numeric: tabular-nums;
+}
+
 .attempted-total {
   display: flex;
   align-items: baseline;
@@ -156,7 +203,7 @@
   width: 100%;
   height: 7px;
   border-radius: 4px;
-  background: #e3e8e4;
+  background: var(--admin-line);
 }
 
 .attempt-segment {
@@ -173,7 +220,7 @@
 }
 
 .attempt-segment.unattempted {
-  background: #aab5ae;
+  background: var(--admin-unattempted);
 }
 
 .attempt-legend {
@@ -201,7 +248,7 @@
 
 .attempt-separator {
   margin-left: 3px;
-  color: #87948c;
+  color: var(--admin-muted);
 }
 
 .empty-state {
@@ -317,7 +364,7 @@
   top: 0;
   z-index: 2;
   color: var(--admin-ink);
-  background: #e8eeea;
+  background: var(--admin-table-head);
   font-size: 13px;
   font-weight: 700;
 }
@@ -334,12 +381,12 @@
   z-index: 1;
   width: 108px;
   min-width: 108px;
-  background: #f7f9f7;
+  background: var(--admin-question-bg);
 }
 
 .comparison-table thead .question-column {
   z-index: 3;
-  background: #e8eeea;
+  background: var(--admin-table-head);
 }
 
 .question-column strong,
@@ -383,7 +430,7 @@
 }
 
 .answer-cell.unattempted {
-  border-left-color: #8a9690;
+  border-left-color: var(--admin-unattempted);
   background: var(--admin-gray-bg);
 }
 
@@ -453,7 +500,121 @@
   }
 
   .total-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
+    gap: 6px;
+  }
+
+  .total-card {
+    display: grid;
+    gap: 3px;
+    padding: 6px 9px;
+    border-top-width: 1px;
+    border-left: 3px solid var(--admin-teal);
+  }
+
+  .total-card-heading {
+    gap: 5px;
+  }
+
+  .rank-label {
+    font-size: 10px;
+  }
+
+  .total-card h3 {
+    font-size: 14px;
+  }
+
+  .total-score {
+    gap: 3px;
+    font-size: 17px;
+  }
+
+  .total-score span {
+    font-size: 10px;
+  }
+
+  .total-card .attempt-summary {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 4px auto;
+    align-items: center;
+    gap: 2px;
+    margin-top: 0;
+  }
+
+  .total-card .attempt-summary.compact {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 4px;
+    gap: 3px;
+  }
+
+  .total-card .compact-attempt-counts {
+    grid-column: 1;
+    grid-row: 1;
+    flex-wrap: wrap;
+    column-gap: 4px;
+    font-size: 8px;
+    line-height: 1.2;
+  }
+
+  .total-card .compact-attempt-counts strong {
+    font-size: 9px;
+  }
+
+  .total-card .attempted-total {
+    grid-column: 1;
+    grid-row: 1;
+    align-items: baseline;
+    justify-content: flex-start;
+    gap: 5px;
+  }
+
+  .total-card .attempted-total > span {
+    font-size: 9px;
+  }
+
+  .total-card .attempted-total strong {
+    font-size: 12px;
+  }
+
+  .total-card .attempt-bar {
+    grid-column: 1;
+    grid-row: 2;
+    height: 4px;
+  }
+
+  .total-card .attempt-summary.compact .attempt-bar {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .total-card .attempt-legend {
+    grid-column: 1;
+    grid-row: 3;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    column-gap: 5px;
+    row-gap: 1px;
+  }
+
+  .total-card .attempt-legend-item {
+    gap: 2px;
+    font-size: 8px;
+  }
+
+  .total-card .attempt-legend-item strong {
+    font-size: 9px;
+  }
+
+  .total-card .attempt-separator {
+    margin-left: 0;
+  }
+
+  .totals-section {
+    margin-bottom: 16px;
+  }
+
+  .section-heading {
+    margin-bottom: 8px;
   }
 
   .section-details > summary {
@@ -471,6 +632,71 @@
 
   .section-score {
     max-width: none;
+    gap: 4px;
+    padding: 6px;
+  }
+
+  .section-score-heading {
+    line-height: 1.2;
+  }
+
+  .section-score-heading > span,
+  .section-score-heading strong {
+    line-height: 1.2;
+  }
+
+  .section-score .attempt-summary {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto 4px auto;
+    gap: 3px;
+    line-height: 1.2;
+  }
+
+  .section-score .attempted-total {
+    grid-column: 1;
+    grid-row: 1;
+    align-items: baseline;
+    justify-content: flex-start;
+    gap: 5px;
+    line-height: 1.2;
+  }
+
+  .section-score .attempted-total > span {
+    font-size: 9px;
+  }
+
+  .section-score .attempted-total strong {
+    font-size: 12px;
+    line-height: 1.2;
+  }
+
+  .section-score .attempt-bar {
+    grid-column: 1;
+    grid-row: 2;
+    height: 4px;
+  }
+
+  .section-score .attempt-legend {
+    grid-column: 1;
+    grid-row: 3;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 4px;
+  }
+
+  .section-score .attempt-legend-item {
+    gap: 2px;
+    font-size: 9px;
+    line-height: 1.2;
+  }
+
+  .section-score .attempt-legend-item strong {
+    font-size: 10px;
+    line-height: 1.2;
+  }
+
+  .section-score .attempt-separator {
+    margin-left: 0;
   }
 
   .comparison-table th,

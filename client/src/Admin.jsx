@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 import answerKey from "../../server/answerKey.json";
+import ThemeToggle from "./ThemeToggle.jsx";
 import "./Admin.css";
 
 const socket = io(`http://${window.location.hostname}:3001`, {
@@ -76,12 +77,42 @@ function getStudentStats(student, selectedSections) {
   return stats;
 }
 
-function AttemptSummary({ stats }) {
+function AttemptSummary({ stats, compact = false }) {
   const outcomes = [
     { label: "Correct", value: stats.correct, className: "correct" },
     { label: "Incorrect", value: stats.incorrect, className: "incorrect" },
     { label: "Unattempted", value: stats.unattempted, className: "unattempted" },
   ];
+  const progressBar = (
+    <div className="attempt-bar" aria-hidden="true">
+      {outcomes.map((outcome) => (
+        <span
+          className={`attempt-segment ${outcome.className}`}
+          key={outcome.label}
+          style={{
+            width: `${stats.total ? (outcome.value / stats.total) * 100 : 0}%`,
+          }}
+        />
+      ))}
+    </div>
+  );
+
+  if (compact) {
+    return (
+      <div className="attempt-summary compact">
+        <p className="compact-attempt-counts">
+          <span>Attempted <strong>{stats.attempted}/{stats.total}</strong></span>
+          <span aria-hidden="true">·</span>
+          <span>Correct <strong>{stats.correct}</strong></span>
+          <span aria-hidden="true">·</span>
+          <span>Incorrect <strong>{stats.incorrect}</strong></span>
+          <span aria-hidden="true">·</span>
+          <span>Unattempted <strong>{stats.unattempted}</strong></span>
+        </p>
+        {progressBar}
+      </div>
+    );
+  }
 
   return (
     <div className="attempt-summary">
@@ -89,17 +120,7 @@ function AttemptSummary({ stats }) {
         <span>Attempted</span>
         <strong>{stats.attempted} / {stats.total}</strong>
       </div>
-      <div className="attempt-bar" aria-hidden="true">
-        {outcomes.map((outcome) => (
-          <span
-            className={`attempt-segment ${outcome.className}`}
-            key={outcome.label}
-            style={{
-              width: `${stats.total ? (outcome.value / stats.total) * 100 : 0}%`,
-            }}
-          />
-        ))}
-      </div>
+      {progressBar}
       <div className="attempt-legend">
         {outcomes.map((outcome, index) => (
           <span className="attempt-legend-item" key={outcome.label}>
@@ -145,6 +166,7 @@ function Admin() {
         <p className="participant-count">
           {participants.length} {participants.length === 1 ? "participant" : "participants"}
         </p>
+        <ThemeToggle />
       </header>
 
       <section className="totals-section" aria-labelledby="totals-heading">
@@ -159,12 +181,14 @@ function Admin() {
           <div className="total-grid">
             {participants.map((student, index) => (
               <article className="total-card" key={student.id ?? student.name}>
-                <span className="rank-label">#{index + 1}</span>
-                <h3>{student.name}</h3>
-                <p className="total-score">
-                  {student.stats.score}<span>marks</span>
-                </p>
-                <AttemptSummary stats={student.stats} />
+                <div className="total-card-heading">
+                  <span className="rank-label">#{index + 1}</span>
+                  <h3>{student.name}</h3>
+                  <p className="total-score">
+                    {student.stats.score}<span>marks</span>
+                  </p>
+                </div>
+                <AttemptSummary stats={student.stats} compact />
               </article>
             ))}
           </div>

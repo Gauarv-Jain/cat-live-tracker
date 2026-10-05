@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { io } from "socket.io-client";
 import answerKeyData from "../../server/answerKey.json";
+import ThemeToggle from "./ThemeToggle.jsx";
 import "./App.css";
 
 const socket = io(`http://${window.location.hostname}:3001`);
@@ -189,7 +190,10 @@ function App() {
   if (!joined) {
     return (
       <main className="test-app join-screen">
-        <header className="test-brand">CAT LIVE TRACKER</header>
+        <header className="test-header">
+          <span className="test-brand">CAT LIVE TRACKER</span>
+          <ThemeToggle />
+        </header>
         <form className="join-panel" onSubmit={joinTest}>
           <p className="test-eyebrow">STUDENT ACCESS</p>
           <h1>Join the test</h1>
@@ -251,6 +255,7 @@ function App() {
       <header className="test-header">
         <span className="test-brand">CAT LIVE TRACKER</span>
         <span className="student-name">{name}</span>
+        <ThemeToggle />
       </header>
 
       <nav className="section-tabs" aria-label="Test sections">
