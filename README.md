@@ -57,16 +57,8 @@ The admin page has no password protection. Only use it on a trusted network. The
 
 For a trusted home Wi-Fi, set the Windows network profile to **Private**:
 
-1. Open **Settings > Network & internet > Wi-Fi**.
-2. Select the connected network and set **Network profile type** to **Private**.
-3. If the phone is on a secondary access point or repeater, make sure it allows access to devices on the main LAN and does not enable guest/client isolation.
-
-For a temporary connection test on a trusted Private network only:
-
-1. Open **Windows Security > Firewall & network protection**.
-2. Open the **Private network** profile marked active.
-3. Temporarily switch **Microsoft Defender Firewall** off, then test the phone connection.
-4. Turn the firewall back on immediately after the test. Do not disable the firewall on Public, guest, or otherwise untrusted networks.
+1. Open **Settings > Privacy & security > Windoes Security > Firewall & network protection > Prive network (active) > Toggel Microsoft Defender Firewall off**.
+2. Open **Settings >Network & internet > Wi-fi > Airetel_Flat properties > Network Profile type > switch the radio button to public then private again (this step is to refresh the network setting, make sure u keep it on private at the end you just need to switch the Network Profile type thats it)**.
 
 A safer long-term option is to leave the firewall enabled and allow **Node.js JavaScript Runtime** through Windows Firewall on **Private networks** only. This permits the app's frontend and backend connections without disabling the firewall.
 
