@@ -164,14 +164,21 @@ function animateRankChange(card, currentRect, previousRect, previousRank, rank, 
 
 function Admin() {
   const [students, setStudents] = useState({});
+  const [snapshots, setSnapshots] = useState([]);
+  const [selectedSnapshotId, setSelectedSnapshotId] = useState(null);
+  const [snapshotName, setSnapshotName] = useState("");
+  const [snapshotMessage, setSnapshotMessage] = useState("");
+  const activeSnapshot = snapshots.find((snapshot) => snapshot.id === selectedSnapshotId) ?? null;
+  const displayStudents = activeSnapshot?.students ?? students;
+  const displayAnswerKey = activeSnapshot?.answerKey ?? answerKey;
   const rankingCards = useRef(new Map());
   const previousPositions = useRef(new Map());
   const previousRanks = useRef(new Map());
   const sectionRankingCards = useRef(new Map());
   const previousSectionPositions = useRef(new Map());
   const previousSectionRanks = useRef(new Map());
-  const sections = buildSections(answerKey);
-  const participants = Object.values(students).sort(
+  const sections = buildSections(displayAnswerKey);
+  const participants = Object.values(displayStudents).sort(
     (first, second) => (second.score ?? 0) - (first.score ?? 0)
   ).map((student) => ({
     ...student,
@@ -244,14 +251,36 @@ function Admin() {
 
   useEffect(() => {
     const handleLiveUpdate = (data) => setStudents(data);
+    const handleSnapshotsUpdate = (data) => setSnapshots(data);
     socket.on("live-update", handleLiveUpdate);
+    socket.on("snapshots-update", handleSnapshotsUpdate);
     socket.connect();
 
     return () => {
       socket.off("live-update", handleLiveUpdate);
+      socket.off("snapshots-update", handleSnapshotsUpdate);
       socket.disconnect();
     };
   }, []);
+
+  const saveSnapshot = () => {
+    const name = snapshotName.trim();
+    if (!name) {
+      setSnapshotMessage("Enter a name for this snapshot.");
+      return;
+    }
+
+    setSnapshotMessage("Saving snapshot…");
+    socket.emit("save-snapshot", { name }, (response) => {
+      if (!response?.ok) {
+        setSnapshotMessage(response?.error ?? "Could not save snapshot.");
+        return;
+      }
+      setSnapshotName("");
+      setSnapshotMessage(`Saved “${response.snapshot.name}”.`);
+      setSelectedSnapshotId(null);
+    });
+  };
 
   return (
     <main className="admin-page">
@@ -265,6 +294,75 @@ function Admin() {
         </p>
         <ThemeToggle />
       </header>
+
+      <section className="snapshot-panel" aria-labelledby="snapshots-heading">
+        <div className="section-heading snapshot-heading">
+          <div>
+            <h2 id="snapshots-heading">Test snapshots</h2>
+            <p className="snapshot-description">Save the current leaderboard and every section’s answer comparison for later.</p>
+          </div>
+          {activeSnapshot && (
+            <button
+              className="snapshot-return"
+              onClick={() => setSelectedSnapshotId(null)}
+              type="button"
+            >
+              Return to live results
+            </button>
+          )}
+        </div>
+
+        {activeSnapshot && (
+          <p className="snapshot-viewing">
+            Viewing saved snapshot: <strong>{activeSnapshot.name}</strong> · {new Date(activeSnapshot.savedAt).toLocaleString()}
+          </p>
+        )}
+
+        <form
+          className="snapshot-save-form"
+          onSubmit={(event) => {
+            event.preventDefault();
+            saveSnapshot();
+          }}
+        >
+          <label className="snapshot-name-label" htmlFor="snapshot-name">Snapshot name</label>
+          <input
+            id="snapshot-name"
+            maxLength={80}
+            onChange={(event) => setSnapshotName(event.target.value)}
+            placeholder="e.g. SIMCAT 9 — final results"
+            value={snapshotName}
+          />
+          <button className="snapshot-save-button" disabled={!snapshotName.trim()} type="submit">
+            Save current test
+          </button>
+        </form>
+        {snapshotMessage && <p className="snapshot-message" role="status">{snapshotMessage}</p>}
+
+        <div className="saved-snapshot-list">
+          {snapshots.length === 0 ? (
+            <p className="empty-state snapshot-empty">No saved snapshots yet.</p>
+          ) : snapshots.map((snapshot) => (
+            <article className={`saved-snapshot${snapshot.id === selectedSnapshotId ? " selected" : ""}`} key={snapshot.id}>
+              <div className="saved-snapshot-copy">
+                <strong>{snapshot.name}</strong>
+                <span>{new Date(snapshot.savedAt).toLocaleString()}</span>
+                <small>{Object.keys(snapshot.students ?? {}).length} participants</small>
+              </div>
+              <button
+                className="snapshot-view-button"
+                onClick={() => {
+                  setSelectedSnapshotId(snapshot.id);
+                  setSnapshotMessage("");
+                }}
+                type="button"
+              >
+                View
+              </button>
+            </article>
+          ))}
+        </div>
+      </section>
 
       <section className="totals-section" aria-labelledby="totals-heading">
         <div className="section-heading">
