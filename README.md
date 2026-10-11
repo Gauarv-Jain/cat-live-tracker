@@ -2,6 +2,20 @@
 
 CAT Live Tracker is a local-network web app for running a CAT-style multiple-choice and numeric-answer test. Students answer on their phones or computers, while an admin dashboard updates live with total and section marks, answer status, and participant comparisons.
 
+```powershell
+cd server
+node index.js
+```
+```powershell
+cd client
+npm run dev -- --host 0.0.0.0
+```
+```powershell
+node index.js
+```
+```powershell
+npm run dev -- --host 0.0.0.0
+```
 The project has two parts:
 
 - `client/`: React and Vite student page and admin dashboard.
