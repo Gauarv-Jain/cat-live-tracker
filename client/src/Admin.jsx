@@ -285,9 +285,72 @@ function Admin() {
   return (
     <main className="admin-page">
       <header className="admin-header">
-        <div>
+        <div className="admin-header-title">
           <p className="admin-eyebrow">CAT LIVE TRACKER / ADMIN</p>
-          <h1>Live results</h1>
+          <div className="admin-title-row">
+            <h1>{activeSnapshot ? "Saved results" : "Live results"}</h1>
+            <details className="snapshot-picker">
+              <summary className="snapshot-picker-trigger" aria-label="Open saved test snapshots">
+                <span>Snapshots</span>
+                <span className="snapshot-picker-count">{snapshots.length}</span>
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4" /></svg>
+              </summary>
+              <div className="snapshot-picker-menu">
+                <form
+                  className="snapshot-quick-save"
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                    saveSnapshot();
+                  }}
+                >
+                  <input
+                    aria-label="New snapshot name"
+                    maxLength={80}
+                    onChange={(event) => setSnapshotName(event.target.value)}
+                    placeholder="Name this snapshot…"
+                    value={snapshotName}
+                  />
+                  <button
+                    aria-label="Save new snapshot"
+                    className="snapshot-quick-add"
+                    disabled={!snapshotName.trim()}
+                    title="Save snapshot"
+                    type="submit"
+                  >+</button>
+                </form>
+                {snapshotMessage && <p className="snapshot-picker-message" role="status">{snapshotMessage}</p>}
+                {activeSnapshot && (
+                  <button
+                    className="snapshot-picker-live"
+                    onClick={() => setSelectedSnapshotId(null)}
+                    type="button"
+                  >← Return to live results</button>
+                )}
+                <div className="snapshot-picker-list">
+                  {snapshots.length === 0 ? (
+                    <p className="snapshot-picker-empty">No snapshots yet</p>
+                  ) : snapshots.map((snapshot) => (
+                    <button
+                      className={`snapshot-picker-item${snapshot.id === selectedSnapshotId ? " selected" : ""}`}
+                      key={snapshot.id}
+                      onClick={() => {
+                        setSelectedSnapshotId(snapshot.id);
+                        setSnapshotMessage("");
+                      }}
+                      title={snapshot.name}
+                      type="button"
+                    >
+                      <span className="snapshot-picker-item-copy">
+                        <strong>{snapshot.name}</strong>
+                        <small>{new Date(snapshot.savedAt).toLocaleDateString()} · {Object.keys(snapshot.students ?? {}).length} participants</small>
+                      </span>
+                      {snapshot.id === selectedSnapshotId && <span className="snapshot-picker-check" aria-hidden="true">✓</span>}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </details>
+          </div>
         </div>
         <p className="participant-count">
           {participants.length} {participants.length === 1 ? "participant" : "participants"}
@@ -295,86 +358,6 @@ function Admin() {
         <ThemeToggle />
       </header>
 
-      <details className="snapshot-panel">
-        <summary className="snapshot-panel-summary">
-          <span className="snapshot-panel-summary-copy">
-            <strong>Test snapshots</strong>
-            <small>Save and revisit past test results</small>
-          </span>
-          <span className="snapshot-panel-summary-meta">
-            {snapshots.length} saved · Click to {snapshots.length ? "manage" : "save"}
-          </span>
-        </summary>
-
-        <div className="snapshot-panel-content">
-          <div className="section-heading snapshot-heading">
-            <div>
-              <h2 id="snapshots-heading">Test snapshots</h2>
-              <p className="snapshot-description">Save the current leaderboard and every section’s answer comparison for later.</p>
-            </div>
-            {activeSnapshot && (
-              <button
-                className="snapshot-return"
-                onClick={() => setSelectedSnapshotId(null)}
-                type="button"
-              >
-                Return to live results
-              </button>
-            )}
-          </div>
-
-        {activeSnapshot && (
-          <p className="snapshot-viewing">
-            Viewing saved snapshot: <strong>{activeSnapshot.name}</strong> · {new Date(activeSnapshot.savedAt).toLocaleString()}
-          </p>
-        )}
-
-        <form
-          className="snapshot-save-form"
-          onSubmit={(event) => {
-            event.preventDefault();
-            saveSnapshot();
-          }}
-        >
-          <label className="snapshot-name-label" htmlFor="snapshot-name">Snapshot name</label>
-          <input
-            id="snapshot-name"
-            maxLength={80}
-            onChange={(event) => setSnapshotName(event.target.value)}
-            placeholder="e.g. SIMCAT 9 — final results"
-            value={snapshotName}
-          />
-          <button className="snapshot-save-button" disabled={!snapshotName.trim()} type="submit">
-            Save current test
-          </button>
-        </form>
-        {snapshotMessage && <p className="snapshot-message" role="status">{snapshotMessage}</p>}
-
-        <div className="saved-snapshot-list">
-          {snapshots.length === 0 ? (
-            <p className="empty-state snapshot-empty">No saved snapshots yet.</p>
-          ) : snapshots.map((snapshot) => (
-            <article className={`saved-snapshot${snapshot.id === selectedSnapshotId ? " selected" : ""}`} key={snapshot.id}>
-              <div className="saved-snapshot-copy">
-                <strong>{snapshot.name}</strong>
-                <span>{new Date(snapshot.savedAt).toLocaleString()}</span>
-                <small>{Object.keys(snapshot.students ?? {}).length} participants</small>
-              </div>
-              <button
-                className="snapshot-view-button"
-                onClick={() => {
-                  setSelectedSnapshotId(snapshot.id);
-                  setSnapshotMessage("");
-                }}
-                type="button"
-              >
-                View
-              </button>
-            </article>
-          ))}
-        </div>
-        </div>
-      </details>
 
       <section className="totals-section" aria-labelledby="totals-heading">
         <div className="section-heading">
