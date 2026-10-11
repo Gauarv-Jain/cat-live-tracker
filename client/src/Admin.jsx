@@ -282,6 +282,22 @@ function Admin() {
     });
   };
 
+  const deleteSnapshot = (snapshot) => {
+    const confirmed = window.confirm(`Delete the snapshot “${snapshot.name}”? This cannot be undone.`);
+    if (!confirmed) return;
+
+    setSnapshotMessage(`Deleting “${snapshot.name}”…`);
+    socket.emit("delete-snapshot", { id: snapshot.id }, (response) => {
+      if (!response?.ok) {
+        setSnapshotMessage(response?.error ?? "Could not delete snapshot.");
+        return;
+      }
+
+      if (selectedSnapshotId === snapshot.id) setSelectedSnapshotId(null);
+      setSnapshotMessage(`Deleted “${snapshot.name}”.`);
+    });
+  };
+
   return (
     <main className="admin-page">
       <header className="admin-header">
@@ -337,22 +353,30 @@ function Admin() {
                   {snapshots.length === 0 ? (
                     <p className="snapshot-picker-empty">No snapshots yet</p>
                   ) : snapshots.map((snapshot) => (
-                    <button
-                      className={`snapshot-picker-item${snapshot.id === selectedSnapshotId ? " selected" : ""}`}
-                      key={snapshot.id}
-                      onClick={() => {
-                        setSelectedSnapshotId(snapshot.id);
-                        setSnapshotMessage("");
-                      }}
-                      title={snapshot.name}
-                      type="button"
-                    >
-                      <span className="snapshot-picker-item-copy">
-                        <strong>{snapshot.name}</strong>
-                        <small>{new Date(snapshot.savedAt).toLocaleDateString()} · {Object.keys(snapshot.students ?? {}).length} participants</small>
-                      </span>
-                      {snapshot.id === selectedSnapshotId && <span className="snapshot-picker-check" aria-hidden="true">✓</span>}
-                    </button>
+                    <div className={`snapshot-picker-row${snapshot.id === selectedSnapshotId ? " selected" : ""}`} key={snapshot.id}>
+                      <button
+                        className={`snapshot-picker-item${snapshot.id === selectedSnapshotId ? " selected" : ""}`}
+                        onClick={() => {
+                          setSelectedSnapshotId(snapshot.id);
+                          setSnapshotMessage("");
+                        }}
+                        title={snapshot.name}
+                        type="button"
+                      >
+                        <span className="snapshot-picker-item-copy">
+                          <strong>{snapshot.name}</strong>
+                          <small>{new Date(snapshot.savedAt).toLocaleDateString()} · {Object.keys(snapshot.students ?? {}).length} participants</small>
+                        </span>
+                        {snapshot.id === selectedSnapshotId && <span className="snapshot-picker-check" aria-hidden="true">✓</span>}
+                      </button>
+                      <button
+                        aria-label={`Delete snapshot ${snapshot.name}`}
+                        className="snapshot-picker-delete"
+                        onClick={() => deleteSnapshot(snapshot)}
+                        title="Delete snapshot"
+                        type="button"
+                      >×</button>
+                    </div>
                   ))}
                 </div>
               </div>
