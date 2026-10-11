@@ -295,22 +295,33 @@ function Admin() {
         <ThemeToggle />
       </header>
 
-      <section className="snapshot-panel" aria-labelledby="snapshots-heading">
-        <div className="section-heading snapshot-heading">
-          <div>
-            <h2 id="snapshots-heading">Test snapshots</h2>
-            <p className="snapshot-description">Save the current leaderboard and every section’s answer comparison for later.</p>
+      <details className="snapshot-panel">
+        <summary className="snapshot-panel-summary">
+          <span className="snapshot-panel-summary-copy">
+            <strong>Test snapshots</strong>
+            <small>Save and revisit past test results</small>
+          </span>
+          <span className="snapshot-panel-summary-meta">
+            {snapshots.length} saved · Click to {snapshots.length ? "manage" : "save"}
+          </span>
+        </summary>
+
+        <div className="snapshot-panel-content">
+          <div className="section-heading snapshot-heading">
+            <div>
+              <h2 id="snapshots-heading">Test snapshots</h2>
+              <p className="snapshot-description">Save the current leaderboard and every section’s answer comparison for later.</p>
+            </div>
+            {activeSnapshot && (
+              <button
+                className="snapshot-return"
+                onClick={() => setSelectedSnapshotId(null)}
+                type="button"
+              >
+                Return to live results
+              </button>
+            )}
           </div>
-          {activeSnapshot && (
-            <button
-              className="snapshot-return"
-              onClick={() => setSelectedSnapshotId(null)}
-              type="button"
-            >
-              Return to live results
-            </button>
-          )}
-        </div>
 
         {activeSnapshot && (
           <p className="snapshot-viewing">
@@ -362,7 +373,8 @@ function Admin() {
             </article>
           ))}
         </div>
-      </section>
+        </div>
+      </details>
 
       <section className="totals-section" aria-labelledby="totals-heading">
         <div className="section-heading">
