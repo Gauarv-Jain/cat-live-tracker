@@ -304,7 +304,7 @@ function Admin() {
         <div className="admin-header-title">
           <p className="admin-eyebrow">CAT LIVE TRACKER / ADMIN</p>
           <div className="admin-title-row">
-            <h1>Live results</h1>
+            <h1>{activeSnapshot ? activeSnapshot.name : "Live results"}</h1>
             <details
               className="snapshot-picker"
               onClick={(event) => {
