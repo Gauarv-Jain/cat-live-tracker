@@ -1,10 +1,17 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
   server: {
-    allowedHosts: ['cattracker5173.loca.lt']
-  }
+    host: '0.0.0.0',
+    // Allow the VS Code/GitHub Dev Tunnels host and the existing localtunnel host.
+    allowedHosts: ['.devtunnels.ms', 'cattracker5173.loca.lt'],
+    proxy: {
+      '/socket.io': {
+        target: 'http://127.0.0.1:3001',
+        ws: true,
+      },
+    },
+  },
 })

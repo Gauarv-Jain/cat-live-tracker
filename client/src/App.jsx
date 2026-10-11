@@ -4,7 +4,7 @@ import answerKeyData from "../../server/answerKey.json";
 import ThemeToggle from "./ThemeToggle.jsx";
 import "./App.css";
 
-const socket = io(`http://${window.location.hostname}:3001`);
+const socket = io({ path: "/socket.io" });
 
 function getSections(key) {
   const sectionNames = key._config?.sectionOrder ?? Object.keys(key.sections ?? {});
