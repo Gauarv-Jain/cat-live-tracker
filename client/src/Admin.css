@@ -816,3 +816,159 @@ html[data-theme='dark'] .admin-page {
     animation: none;
   }
 }
+
+/* Test snapshot controls */
+.snapshot-panel {
+  margin-bottom: 30px;
+  padding: 18px;
+  border: 1px solid var(--admin-line);
+  background: var(--admin-paper);
+}
+
+.snapshot-heading {
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.snapshot-description {
+  margin: 5px 0 0;
+  color: var(--admin-muted);
+  font-size: 13px;
+}
+
+.snapshot-save-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 9px;
+  margin-top: 14px;
+}
+
+.snapshot-name-label {
+  flex-basis: 100%;
+  color: var(--admin-muted);
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.snapshot-save-form input {
+  flex: 1 1 240px;
+  min-width: 0;
+  min-height: 40px;
+  padding: 9px 11px;
+  border: 1px solid var(--admin-line);
+  border-radius: 6px;
+  color: var(--admin-ink);
+  background: var(--admin-canvas);
+  font: inherit;
+}
+
+.snapshot-save-button,
+.snapshot-view-button,
+.snapshot-return {
+  min-height: 40px;
+  padding: 9px 13px;
+  border: 1px solid var(--admin-teal);
+  border-radius: 6px;
+  color: #fff;
+  background: var(--admin-teal);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.snapshot-save-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.snapshot-view-button,
+.snapshot-return {
+  color: var(--admin-teal);
+  background: transparent;
+}
+
+.saved-snapshot-list {
+  display: grid;
+  gap: 7px;
+  margin-top: 12px;
+}
+
+.saved-snapshot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--admin-line);
+  background: var(--admin-canvas);
+}
+
+.saved-snapshot.selected {
+  border-color: var(--admin-teal);
+}
+
+.saved-snapshot-copy {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+
+.saved-snapshot-copy strong {
+  overflow-wrap: anywhere;
+  color: var(--admin-ink);
+  font-size: 14px;
+}
+
+.saved-snapshot-copy span,
+.saved-snapshot-copy small,
+.snapshot-message,
+.snapshot-viewing {
+  color: var(--admin-muted);
+  font-size: 12px;
+}
+
+.snapshot-message {
+  margin: 8px 0 0;
+}
+
+.snapshot-viewing {
+  padding: 10px 12px;
+  border-left: 3px solid var(--admin-teal);
+  background: var(--admin-canvas);
+}
+
+.snapshot-viewing strong {
+  color: var(--admin-ink);
+}
+
+.snapshot-empty {
+  margin: 0;
+  padding: 12px;
+}
+
+@media (max-width: 700px) {
+  .snapshot-panel {
+    padding: 12px;
+    margin-bottom: 18px;
+  }
+
+  .snapshot-save-form {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .snapshot-save-form input,
+  .snapshot-save-button {
+    width: 100%;
+  }
+
+  .saved-snapshot {
+    align-items: flex-start;
+  }
+
+  .snapshot-view-button {
+    flex: 0 0 auto;
+  }
+}
