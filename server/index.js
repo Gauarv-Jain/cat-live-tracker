@@ -144,6 +144,34 @@ io.on("connection", (socket) => {
     console.log(`Saved test snapshot: ${cleanName}`);
   });
 
+  socket.on("delete-snapshot", ({ id } = {}, acknowledge = () => {}) => {
+    if (typeof id !== "string" || !id) {
+      acknowledge({ ok: false, error: "Invalid snapshot." });
+      return;
+    }
+
+    const existingSnapshot = snapshots.find((snapshot) => snapshot.id === id);
+    if (!existingSnapshot) {
+      acknowledge({ ok: false, error: "Snapshot not found. It may already have been deleted." });
+      return;
+    }
+
+    const previousSnapshots = snapshots;
+    snapshots = snapshots.filter((snapshot) => snapshot.id !== id);
+    try {
+      persistSnapshots();
+    } catch (error) {
+      snapshots = previousSnapshots;
+      console.error("Could not delete saved test snapshot:", error);
+      acknowledge({ ok: false, error: "Snapshot could not be deleted from disk." });
+      return;
+    }
+
+    io.emit("snapshots-update", snapshots);
+    acknowledge({ ok: true, id });
+    console.log(`Deleted test snapshot: ${existingSnapshot.name}`);
+  });
+
   /*
   ==============================
   JOIN TEST
