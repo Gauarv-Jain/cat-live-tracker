@@ -1094,15 +1094,18 @@ html[data-theme='dark'] .admin-page {
 }
 
 .snapshot-picker-count {
-  display: inline-grid;
-  min-width: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
   height: 18px;
-  padding: 0 4px;
-  place-items: center;
-  border-radius: 10px;
+  flex: 0 0 18px;
+  padding: 0;
+  border-radius: 50%;
   color: var(--admin-muted);
   background: var(--admin-canvas);
   font-size: 10px;
+  line-height: 1;
   font-variant-numeric: tabular-nums;
 }
 
