@@ -4,7 +4,8 @@ import answerKey from "../../server/answerKey.json";
 import ThemeToggle from "./ThemeToggle.jsx";
 import "./Admin.css";
 
-const socket = io(`http://${window.location.hostname}:3001`, {
+const socket = io({
+  path: "/socket.io",
   autoConnect: false,
 });
 
