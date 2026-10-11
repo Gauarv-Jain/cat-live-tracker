@@ -820,9 +820,66 @@ html[data-theme='dark'] .admin-page {
 /* Test snapshot controls */
 .snapshot-panel {
   margin-bottom: 30px;
-  padding: 18px;
+  padding: 0;
   border: 1px solid var(--admin-line);
   background: var(--admin-paper);
+}
+
+.snapshot-panel-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 18px;
+  color: var(--admin-ink);
+  cursor: pointer;
+  list-style: none;
+}
+
+.snapshot-panel-summary::-webkit-details-marker {
+  display: none;
+}
+
+.snapshot-panel-summary::after {
+  content: "+";
+  flex: 0 0 auto;
+  color: var(--admin-teal);
+  font-size: 24px;
+  line-height: 1;
+}
+
+.snapshot-panel[open] > .snapshot-panel-summary::after {
+  content: "−";
+}
+
+.snapshot-panel-summary-copy {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.snapshot-panel-summary-copy strong {
+  font-size: 16px;
+}
+
+.snapshot-panel-summary-copy small,
+.snapshot-panel-summary-meta {
+  color: var(--admin-muted);
+  font-size: 12px;
+}
+
+.snapshot-panel-summary-meta {
+  margin-left: auto;
+  text-align: right;
+}
+
+.snapshot-panel-content {
+  padding: 0 18px 18px;
+}
+
+.snapshot-panel[open] > .snapshot-panel-summary {
+  border-bottom: 1px solid var(--admin-line);
+  margin-bottom: 16px;
 }
 
 .snapshot-heading {
@@ -950,8 +1007,21 @@ html[data-theme='dark'] .admin-page {
 
 @media (max-width: 700px) {
   .snapshot-panel {
-    padding: 12px;
+    padding: 0;
     margin-bottom: 18px;
+  }
+
+  .snapshot-panel-summary {
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .snapshot-panel-summary-meta {
+    max-width: 112px;
+  }
+
+  .snapshot-panel-content {
+    padding: 0 12px 12px;
   }
 
   .snapshot-save-form {
