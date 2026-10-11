@@ -288,8 +288,15 @@ function Admin() {
         <div className="admin-header-title">
           <p className="admin-eyebrow">CAT LIVE TRACKER / ADMIN</p>
           <div className="admin-title-row">
-            <h1>{activeSnapshot ? "Saved results" : "Live results"}</h1>
-            <details className="snapshot-picker">
+            <h1>Live results</h1>
+            <details
+              className="snapshot-picker"
+              onClick={(event) => {
+                if (event.target.closest(".snapshot-picker-item, .snapshot-picker-live")) {
+                  event.currentTarget.open = false;
+                }
+              }}
+            >
               <summary className="snapshot-picker-trigger" aria-label="Open saved test snapshots">
                 <span>Snapshots</span>
                 <span className="snapshot-picker-count">{snapshots.length}</span>
