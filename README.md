@@ -2,6 +2,21 @@
 
 CAT Live Tracker is a local-network web app for running a CAT-style multiple-choice and numeric-answer test. Students answer on their phones or computers, while an admin dashboard updates live with total and section marks, answer status, and participant comparisons.
 
+## Quick checklist
+
+Use this checklist when setting up a test and sharing it with participants:
+
+- [ ] Install dependencies in both `server/` and `client/` (first setup only).
+- [ ] Put the test's answers in `server/answerKey.json` and restart the backend after changing the key.
+- [ ] Start the backend on port `3001` and the frontend on port `5173`; keep both running.
+- [ ] In VS Code's **Ports** tab, forward port `5173`.
+- [ ] **Set port visibility to Public**: right-click the forwarded port row → **Port Visibility** → **Public**.
+- [ ] Copy the URL from the **Forwarded Address** column and share it with participants.
+- [ ] Open the same URL with `?admin` appended to access the admin dashboard; keep this admin link private.
+- [ ] Save a named snapshot from the admin dashboard when you want to preserve the current results and answer key.
+
+See [Start the app](#start-the-app), [Share the app with others using VS Code Port Forwarding](#share-the-app-with-others-using-vs-code-port-forwarding), and [Admin snapshots](#admin-snapshots) for details.
+
 ```powershell
 cd server
 node index.js
