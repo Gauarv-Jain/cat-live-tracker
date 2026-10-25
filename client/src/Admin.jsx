@@ -164,14 +164,21 @@ function animateRankChange(card, currentRect, previousRect, previousRank, rank, 
 
 function Admin() {
   const [students, setStudents] = useState({});
+  const [snapshots, setSnapshots] = useState([]);
+  const [selectedSnapshotId, setSelectedSnapshotId] = useState(null);
+  const [snapshotName, setSnapshotName] = useState("");
+  const [snapshotMessage, setSnapshotMessage] = useState("");
+  const activeSnapshot = snapshots.find((snapshot) => snapshot.id === selectedSnapshotId) ?? null;
+  const displayStudents = activeSnapshot?.students ?? students;
+  const displayAnswerKey = activeSnapshot?.answerKey ?? answerKey;
   const rankingCards = useRef(new Map());
   const previousPositions = useRef(new Map());
   const previousRanks = useRef(new Map());
   const sectionRankingCards = useRef(new Map());
   const previousSectionPositions = useRef(new Map());
   const previousSectionRanks = useRef(new Map());
-  const sections = buildSections(answerKey);
-  const participants = Object.values(students).sort(
+  const sections = buildSections(displayAnswerKey);
+  const participants = Object.values(displayStudents).sort(
     (first, second) => (second.score ?? 0) - (first.score ?? 0)
   ).map((student) => ({
     ...student,
@@ -244,27 +251,144 @@ function Admin() {
 
   useEffect(() => {
     const handleLiveUpdate = (data) => setStudents(data);
+    const handleSnapshotsUpdate = (data) => setSnapshots(data);
     socket.on("live-update", handleLiveUpdate);
+    socket.on("snapshots-update", handleSnapshotsUpdate);
     socket.connect();
 
     return () => {
       socket.off("live-update", handleLiveUpdate);
+      socket.off("snapshots-update", handleSnapshotsUpdate);
       socket.disconnect();
     };
   }, []);
 
+  const saveSnapshot = () => {
+    const name = snapshotName.trim();
+    if (!name) {
+      setSnapshotMessage("Enter a name for this snapshot.");
+      return;
+    }
+
+    setSnapshotMessage("Saving snapshot…");
+    socket.emit("save-snapshot", { name }, (response) => {
+      if (!response?.ok) {
+        setSnapshotMessage(response?.error ?? "Could not save snapshot.");
+        return;
+      }
+      setSnapshotName("");
+      setSnapshotMessage(`Saved “${response.snapshot.name}”.`);
+      setSelectedSnapshotId(null);
+    });
+  };
+
+  const deleteSnapshot = (snapshot) => {
+    const confirmed = window.confirm(`Delete the snapshot “${snapshot.name}”? This cannot be undone.`);
+    if (!confirmed) return;
+
+    setSnapshotMessage(`Deleting “${snapshot.name}”…`);
+    socket.emit("delete-snapshot", { id: snapshot.id }, (response) => {
+      if (!response?.ok) {
+        setSnapshotMessage(response?.error ?? "Could not delete snapshot.");
+        return;
+      }
+
+      if (selectedSnapshotId === snapshot.id) setSelectedSnapshotId(null);
+      setSnapshotMessage(`Deleted “${snapshot.name}”.`);
+    });
+  };
+
   return (
     <main className="admin-page">
       <header className="admin-header">
-        <div>
+        <div className="admin-header-title">
           <p className="admin-eyebrow">CAT LIVE TRACKER / ADMIN</p>
-          <h1>Live results</h1>
+          <div className="admin-title-row">
+            <h1>{activeSnapshot ? activeSnapshot.name : "Live results"}</h1>
+            <details
+              className="snapshot-picker"
+              onClick={(event) => {
+                if (event.target.closest(".snapshot-picker-item, .snapshot-picker-live")) {
+                  event.currentTarget.open = false;
+                }
+              }}
+            >
+              <summary className="snapshot-picker-trigger" aria-label="Open saved test snapshots">
+                <span>Snapshots</span>
+                <span className="snapshot-picker-count">{snapshots.length}</span>
+                <svg viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4" /></svg>
+              </summary>
+              <div className="snapshot-picker-menu">
+                <form
+                  className="snapshot-quick-save"
+                  onSubmit={(event) => {
+                    event.preventDefault();
+                    saveSnapshot();
+                  }}
+                >
+                  <input
+                    aria-label="New snapshot name"
+                    maxLength={80}
+                    onChange={(event) => setSnapshotName(event.target.value)}
+                    placeholder="Name this snapshot…"
+                    value={snapshotName}
+                  />
+                  <button
+                    aria-label="Save new snapshot"
+                    className="snapshot-quick-add"
+                    disabled={!snapshotName.trim()}
+                    title="Save snapshot"
+                    type="submit"
+                  >+</button>
+                </form>
+                {snapshotMessage && <p className="snapshot-picker-message" role="status">{snapshotMessage}</p>}
+                {activeSnapshot && (
+                  <button
+                    className="snapshot-picker-live"
+                    onClick={() => setSelectedSnapshotId(null)}
+                    type="button"
+                  >← Return to live results</button>
+                )}
+                <div className="snapshot-picker-list">
+                  {snapshots.length === 0 ? (
+                    <p className="snapshot-picker-empty">No snapshots yet</p>
+                  ) : snapshots.map((snapshot) => (
+                    <div className={`snapshot-picker-row${snapshot.id === selectedSnapshotId ? " selected" : ""}`} key={snapshot.id}>
+                      <button
+                        className={`snapshot-picker-item${snapshot.id === selectedSnapshotId ? " selected" : ""}`}
+                        onClick={() => {
+                          setSelectedSnapshotId(snapshot.id);
+                          setSnapshotMessage("");
+                        }}
+                        title={snapshot.name}
+                        type="button"
+                      >
+                        <span className="snapshot-picker-item-copy">
+                          <strong>{snapshot.name}</strong>
+                          <small>{new Date(snapshot.savedAt).toLocaleDateString()} · {Object.keys(snapshot.students ?? {}).length} participants</small>
+                        </span>
+                        {snapshot.id === selectedSnapshotId && <span className="snapshot-picker-check" aria-hidden="true">✓</span>}
+                      </button>
+                      <button
+                        aria-label={`Delete snapshot ${snapshot.name}`}
+                        className="snapshot-picker-delete"
+                        onClick={() => deleteSnapshot(snapshot)}
+                        title="Delete snapshot"
+                        type="button"
+                      >×</button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </details>
+          </div>
         </div>
         <p className="participant-count">
           {participants.length} {participants.length === 1 ? "participant" : "participants"}
         </p>
         <ThemeToggle />
       </header>
+
 
       <section className="totals-section" aria-labelledby="totals-heading">
         <div className="section-heading">

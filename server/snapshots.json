@@ -1,0 +1,1367 @@
+[
+  {
+    "id": "46a57e89-8b4c-429a-bb74-90efbc6d3aad",
+    "name": "sim cat 2",
+    "savedAt": "2026-10-20T11:52:21.296Z",
+    "students": {
+      "UXdP4PBSSmje4_HXAAAH": {
+        "id": "UXdP4PBSSmje4_HXAAAH",
+        "name": "Gaurav Jain",
+        "answers": {
+          "VARC": {
+            "1": "C",
+            "2": "C",
+            "3": "C",
+            "4": "B",
+            "5": "C",
+            "6": "D",
+            "7": "A",
+            "8": "B",
+            "9": "A",
+            "10": "B",
+            "11": "D",
+            "12": "C",
+            "13": "A",
+            "14": "C",
+            "15": "2",
+            "16": "A",
+            "22": "B",
+            "23": "C",
+            "24": "5"
+          },
+          "DILR": {
+            "5": "A",
+            "6": "C",
+            "7": "5",
+            "8": "D",
+            "10": "3",
+            "19": "4",
+            "20": "D",
+            "21": "C",
+            "22": "C"
+          },
+          "QUANT": {
+            "1": "D",
+            "2": "C",
+            "4": "C",
+            "7": "60",
+            "8": "10",
+            "13": "B",
+            "14": "C",
+            "17": "B"
+          }
+        },
+        "score": 67
+      },
+      "S0EqkKX_8nZLoXtEAABE": {
+        "id": "S0EqkKX_8nZLoXtEAABE",
+        "name": "Hrriday",
+        "answers": {
+          "VARC": {
+            "1": "C",
+            "2": "C",
+            "3": "C",
+            "4": "B",
+            "5": "C",
+            "6": "A",
+            "7": "A",
+            "8": "D",
+            "9": "A",
+            "10": "B",
+            "11": "D",
+            "12": "B",
+            "13": "A",
+            "14": "A",
+            "15": "3",
+            "16": "C",
+            "17": "B",
+            "18": "B",
+            "19": "B",
+            "20": "D",
+            "22": "B",
+            "23": "C",
+            "24": "3"
+          },
+          "DILR": {
+            "1": "5",
+            "2": "2",
+            "3": "A",
+            "4": "D",
+            "5": "A",
+            "6": "C",
+            "7": "5",
+            "8": "C",
+            "9": "6",
+            "10": "14",
+            "11": "D",
+            "12": "C",
+            "13": "4"
+          },
+          "QUANT": {
+            "2": "C",
+            "13": "B",
+            "14": "C",
+            "16": "A",
+            "17": "B",
+            "19": "45",
+            "22": "1008"
+          }
+        },
+        "score": 99
+      },
+      "wWrDqs9ow-Cgq847AABG": {
+        "id": "wWrDqs9ow-Cgq847AABG",
+        "name": "vishal",
+        "answers": {
+          "VARC": {
+            "1": "B",
+            "2": "C",
+            "3": "C",
+            "4": "A",
+            "5": "A",
+            "6": "C",
+            "7": "A",
+            "8": "C",
+            "9": "C",
+            "10": "B",
+            "11": "D",
+            "12": "C",
+            "13": "A",
+            "14": "C",
+            "15": "3",
+            "17": "C",
+            "18": "A",
+            "19": "B",
+            "22": "D",
+            "23": "C",
+            "24": "5"
+          },
+          "DILR": {
+            "5": "A",
+            "6": "C",
+            "7": "5",
+            "8": "D",
+            "9": "6",
+            "10": "14",
+            "19": "4",
+            "20": "D",
+            "21": "C",
+            "22": "C"
+          },
+          "QUANT": {
+            "3": "C",
+            "4": "C",
+            "8": "10",
+            "10": "D",
+            "12": "C",
+            "13": "B",
+            "14": "C",
+            "15": "100",
+            "16": "C",
+            "17": "B",
+            "19": "45",
+            "21": "20"
+          }
+        },
+        "score": 82
+      }
+    },
+    "answerKey": {
+      "_config": {
+        "numbering": "restart",
+        "sectionOrder": [
+          "VARC",
+          "DILR",
+          "QUANT"
+        ],
+        "legacyQuestionOrder": [
+          "VARC",
+          "DILR",
+          "QUANT"
+        ]
+      },
+      "sections": {
+        "VARC": {
+          "1": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "2": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "3": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "4": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "5": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "6": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "7": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "8": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "9": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "10": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "11": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "12": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "13": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "14": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "15": {
+            "type": "TITA",
+            "correct": 3
+          },
+          "16": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "17": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "18": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "19": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "20": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "21": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "22": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "23": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "24": {
+            "type": "TITA",
+            "correct": 4
+          }
+        },
+        "DILR": {
+          "1": {
+            "type": "TITA",
+            "correct": 5
+          },
+          "2": {
+            "type": "TITA",
+            "correct": 2
+          },
+          "3": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "4": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "5": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "6": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "7": {
+            "type": "TITA",
+            "correct": 5
+          },
+          "8": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "9": {
+            "type": "TITA",
+            "correct": 6
+          },
+          "10": {
+            "type": "TITA",
+            "correct": 14
+          },
+          "11": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "12": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "13": {
+            "type": "TITA",
+            "correct": 2
+          },
+          "14": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "15": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "16": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "17": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "18": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "19": {
+            "type": "TITA",
+            "correct": 4
+          },
+          "20": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "21": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "22": {
+            "type": "MCQ",
+            "correct": "C"
+          }
+        },
+        "QUANT": {
+          "1": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "2": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "3": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "4": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "5": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "6": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "7": {
+            "type": "TITA",
+            "correct": 60
+          },
+          "8": {
+            "type": "TITA",
+            "correct": 10
+          },
+          "9": {
+            "type": "TITA",
+            "correct": 496
+          },
+          "10": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "11": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "12": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "13": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "14": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "15": {
+            "type": "TITA",
+            "correct": 100
+          },
+          "16": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "17": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "18": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "19": {
+            "type": "TITA",
+            "correct": 45
+          },
+          "20": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "21": {
+            "type": "TITA",
+            "correct": 20
+          },
+          "22": {
+            "type": "TITA",
+            "correct": 1008
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "d441b841-d8d4-4c3e-913e-07650d04f024",
+    "name": "sim cat 3",
+    "savedAt": "2026-10-18T10:52:40.134Z",
+    "students": {
+      "SnkpGur3W5FY70StAAAB": {
+        "id": "SnkpGur3W5FY70StAAAB",
+        "name": "Gaurav Jain",
+        "answers": {
+          "VARC": {
+            "5": "D",
+            "6": "D",
+            "7": "A",
+            "8": "B",
+            "9": "A",
+            "10": "B",
+            "11": "A",
+            "12": "D",
+            "13": "B",
+            "14": "A",
+            "15": "B",
+            "16": "5",
+            "17": "C",
+            "18": "C",
+            "22": "B",
+            "24": "4"
+          },
+          "DILR": {
+            "1": "C",
+            "3": "A",
+            "4": "C",
+            "6": "20",
+            "7": "C",
+            "8": "200",
+            "9": "D",
+            "10": "A"
+          },
+          "QUANT": {
+            "2": "A",
+            "5": "C",
+            "6": "D",
+            "7": "B",
+            "11": "B",
+            "12": "C",
+            "14": "B",
+            "18": "D",
+            "20": "4",
+            "22": "14"
+          }
+        },
+        "score": 67
+      },
+      "D-ZFmU849mN-wxnOAAAg": {
+        "id": "D-ZFmU849mN-wxnOAAAg",
+        "name": "vishal sharma",
+        "answers": {
+          "VARC": {
+            "5": "D",
+            "6": "C",
+            "7": "A",
+            "8": "B",
+            "9": "B",
+            "10": "B",
+            "11": "D",
+            "12": "D",
+            "13": "D",
+            "14": "D",
+            "15": "B",
+            "16": "5",
+            "17": "B",
+            "18": "C",
+            "19": "A",
+            "20": "B",
+            "21": "A",
+            "22": "B",
+            "23": "A",
+            "24": "3"
+          },
+          "DILR": {
+            "6": "40",
+            "7": "D",
+            "8": "184",
+            "9": "D",
+            "10": "B"
+          },
+          "QUANT": {
+            "1": "A",
+            "3": "B",
+            "4": "C",
+            "5": "C",
+            "6": "D",
+            "7": "B",
+            "8": "2",
+            "9": "C",
+            "10": "B",
+            "12": "C",
+            "13": "A",
+            "16": "B",
+            "18": "D",
+            "20": "4"
+          }
+        },
+        "score": 52
+      },
+      "z8lukVu2VwsGNbu3AACB": {
+        "id": "z8lukVu2VwsGNbu3AACB",
+        "name": "Hrriday",
+        "answers": {
+          "VARC": {
+            "1": "D",
+            "2": "D",
+            "3": "B",
+            "4": "D",
+            "5": "B",
+            "6": "D",
+            "7": "C",
+            "8": "B",
+            "10": "A",
+            "11": "D",
+            "12": "D",
+            "13": "C",
+            "14": "D",
+            "15": "B",
+            "16": "1",
+            "17": "B",
+            "18": "C",
+            "19": "B",
+            "20": "C",
+            "21": "A",
+            "22": "C",
+            "23": "A",
+            "24": "5"
+          },
+          "DILR": {
+            "6": "20",
+            "7": "C",
+            "8": "200",
+            "9": "D",
+            "10": "A"
+          },
+          "QUANT": {
+            "3": "B",
+            "4": "A",
+            "5": "C",
+            "6": "C",
+            "7": "B",
+            "8": "157",
+            "9": "C",
+            "10": "B",
+            "11": "B"
+          }
+        },
+        "score": 61
+      }
+    },
+    "answerKey": {
+      "_config": {
+        "numbering": "restart",
+        "sectionOrder": [
+          "VARC",
+          "DILR",
+          "QUANT"
+        ],
+        "legacyQuestionOrder": [
+          "VARC",
+          "DILR",
+          "QUANT"
+        ]
+      },
+      "sections": {
+        "VARC": {
+          "1": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "2": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "3": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "4": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "5": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "6": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "7": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "8": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "9": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "10": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "11": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "12": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "13": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "14": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "15": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "16": {
+            "type": "TITA",
+            "correct": 5
+          },
+          "17": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "18": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "19": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "20": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "21": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "22": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "23": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "24": {
+            "type": "TITA",
+            "correct": 5
+          }
+        },
+        "DILR": {
+          "1": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "2": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "3": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "4": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "5": {
+            "type": "TITA",
+            "correct": 2
+          },
+          "6": {
+            "type": "TITA",
+            "correct": 20
+          },
+          "7": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "8": {
+            "type": "TITA",
+            "correct": 200
+          },
+          "9": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "10": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "11": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "12": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "13": {
+            "type": "TITA",
+            "correct": 2
+          },
+          "14": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "15": {
+            "type": "TITA",
+            "correct": 0
+          },
+          "16": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "17": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "18": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "19": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "20": {
+            "type": "MCQ",
+            "correct": "A"
+          }
+        },
+        "QUANT": {
+          "1": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "2": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "3": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "4": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "5": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "6": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "7": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "8": {
+            "type": "TITA",
+            "correct": 2
+          },
+          "9": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "10": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "11": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "12": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "13": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "14": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "15": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "16": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "17": {
+            "type": "TITA",
+            "correct": 60
+          },
+          "18": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "19": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "20": {
+            "type": "TITA",
+            "correct": 4
+          },
+          "21": {
+            "type": "TITA",
+            "correct": 4
+          },
+          "22": {
+            "type": "TITA",
+            "correct": 14
+          }
+        }
+      }
+    }
+  },
+  {
+    "id": "3a4e43e3-7a3f-4e88-ba3e-6aa2f9401921",
+    "name": "test4",
+    "savedAt": "2026-10-11T18:20:45.366Z",
+    "students": {
+      "ePbtPNAyfqFC6uvyAAAF": {
+        "id": "ePbtPNAyfqFC6uvyAAAF",
+        "name": "Gaurav Jain",
+        "answers": {
+          "VARC": {
+            "1": "C",
+            "2": "A",
+            "3": "B",
+            "4": "A",
+            "5": "A",
+            "6": "5",
+            "7": "C",
+            "8": "D",
+            "9": "C",
+            "10": "B",
+            "11": "C",
+            "16": "A",
+            "17": "A",
+            "18": "C",
+            "19": "C",
+            "20": "4",
+            "21": "A",
+            "22": "D",
+            "23": "B",
+            "24": "D"
+          },
+          "DILR": {
+            "1": "B",
+            "2": "A",
+            "3": "80",
+            "4": "160",
+            "11": "D",
+            "19": "D",
+            "20": "A",
+            "21": "A"
+          },
+          "QUANT": {
+            "1": "C",
+            "5": "A",
+            "7": "390",
+            "9": "B",
+            "11": "D",
+            "14": "4"
+          }
+        },
+        "score": 76
+      },
+      "0QKro3nPCD3lG7mmAAAh": {
+        "id": "0QKro3nPCD3lG7mmAAAh",
+        "name": "Hrriday",
+        "answers": {
+          "VARC": {
+            "1": "C",
+            "2": "A",
+            "3": "A",
+            "4": "D",
+            "5": "D",
+            "6": "5",
+            "8": "A",
+            "9": "C",
+            "10": "B",
+            "11": "C",
+            "12": "B",
+            "13": "B",
+            "14": "D",
+            "15": "B",
+            "16": "B",
+            "17": "D",
+            "18": "C",
+            "19": "C",
+            "20": "4",
+            "21": "A",
+            "22": "B",
+            "23": "D",
+            "24": "C"
+          },
+          "DILR": {
+            "1": "B",
+            "2": "A",
+            "3": "80",
+            "4": "200",
+            "9": "A",
+            "10": "B",
+            "11": "D",
+            "12": "A",
+            "13": "C",
+            "14": "A"
+          },
+          "QUANT": {
+            "1": "C",
+            "4": "B",
+            "5": "A",
+            "8": "3",
+            "9": "B",
+            "11": "D",
+            "13": "B",
+            "15": "10"
+          }
+        },
+        "score": 77
+      },
+      "eVTwGcpFkZVYhG7UAAAv": {
+        "id": "eVTwGcpFkZVYhG7UAAAv",
+        "name": "vishal",
+        "answers": {
+          "VARC": {
+            "1": "C",
+            "2": "D",
+            "3": "B",
+            "4": "A",
+            "5": "D",
+            "7": "C",
+            "8": "A",
+            "9": "C",
+            "11": "C",
+            "12": "B",
+            "14": "D",
+            "16": "A",
+            "17": "A",
+            "18": "A",
+            "19": "D",
+            "20": "4",
+            "21": "A",
+            "22": "D",
+            "23": "B",
+            "24": "A"
+          },
+          "DILR": {
+            "1": "B",
+            "2": "A",
+            "3": "80",
+            "4": "200",
+            "15": "5",
+            "19": "D",
+            "20": "D",
+            "21": "A",
+            "22": "760"
+          },
+          "QUANT": {
+            "1": "C",
+            "2": "B",
+            "4": "B",
+            "5": "C",
+            "6": "D",
+            "7": "390",
+            "8": "3",
+            "9": "B",
+            "12": "C",
+            "13": "B",
+            "14": "4",
+            "16": "A",
+            "21": "C",
+            "22": "B"
+          }
+        },
+        "score": 62
+      }
+    },
+    "answerKey": {
+      "_config": {
+        "numbering": "restart",
+        "sectionOrder": [
+          "VARC",
+          "DILR",
+          "QUANT"
+        ],
+        "legacyQuestionOrder": [
+          "VARC",
+          "DILR",
+          "QUANT"
+        ]
+      },
+      "sections": {
+        "VARC": {
+          "1": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "2": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "3": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "4": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "5": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "6": {
+            "type": "TITA",
+            "correct": 2
+          },
+          "7": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "8": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "9": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "10": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "11": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "12": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "13": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "14": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "15": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "16": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "17": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "18": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "19": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "20": {
+            "type": "TITA",
+            "correct": 4
+          },
+          "21": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "22": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "23": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "24": {
+            "type": "MCQ",
+            "correct": "C"
+          }
+        },
+        "DILR": {
+          "1": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "2": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "3": {
+            "type": "TITA",
+            "correct": 80
+          },
+          "4": {
+            "type": "TITA",
+            "correct": 200
+          },
+          "5": {
+            "type": "TITA",
+            "correct": 41472000
+          },
+          "6": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "7": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "8": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "9": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "10": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "11": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "12": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "13": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "14": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "15": {
+            "type": "TITA",
+            "correct": 5
+          },
+          "16": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "17": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "18": {
+            "type": "TITA",
+            "correct": 5
+          },
+          "19": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "20": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "21": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "22": {
+            "type": "TITA",
+            "correct": 720
+          }
+        },
+        "QUANT": {
+          "1": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "2": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "3": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "4": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "5": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "6": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "7": {
+            "type": "TITA",
+            "correct": 390
+          },
+          "8": {
+            "type": "TITA",
+            "correct": 3
+          },
+          "9": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "10": {
+            "type": "TITA",
+            "correct": 405
+          },
+          "11": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "12": {
+            "type": "MCQ",
+            "correct": "D"
+          },
+          "13": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "14": {
+            "type": "TITA",
+            "correct": 4
+          },
+          "15": {
+            "type": "TITA",
+            "correct": 8
+          },
+          "16": {
+            "type": "MCQ",
+            "correct": "A"
+          },
+          "17": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "18": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "19": {
+            "type": "MCQ",
+            "correct": "C"
+          },
+          "20": {
+            "type": "TITA",
+            "correct": 61
+          },
+          "21": {
+            "type": "MCQ",
+            "correct": "B"
+          },
+          "22": {
+            "type": "MCQ",
+            "correct": "C"
+          }
+        }
+      }
+    }
+  }
+]

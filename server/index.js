@@ -1,5 +1,8 @@
 const express = require("express");
 const http = require("http");
+const fs = require("fs");
+const path = require("path");
+const crypto = require("crypto");
 const { Server } = require("socket.io");
 const cors = require("cors");
 const answerKey = require("./answerKey.json");
@@ -23,6 +26,23 @@ STUDENT STORAGE
 */
 
 const students = {};
+const snapshotsFile = path.join(__dirname, "snapshots.json");
+let snapshots = [];
+
+try {
+  snapshots = JSON.parse(fs.readFileSync(snapshotsFile, "utf8"));
+  if (!Array.isArray(snapshots)) snapshots = [];
+} catch (error) {
+  if (error.code !== "ENOENT") {
+    console.error("Could not read saved test snapshots:", error);
+  }
+}
+
+function persistSnapshots() {
+  const temporaryFile = `${snapshotsFile}.tmp`;
+  fs.writeFileSync(temporaryFile, JSON.stringify(snapshots, null, 2), "utf8");
+  fs.renameSync(temporaryFile, snapshotsFile);
+}
 
 /*
 ==================================
@@ -92,6 +112,65 @@ SOCKET CONNECTIONS
 io.on("connection", (socket) => {
   console.log("User connected");
   socket.emit("live-update", students);
+  socket.emit("snapshots-update", snapshots);
+
+  socket.on("save-snapshot", ({ name } = {}, acknowledge = () => {}) => {
+    const cleanName = typeof name === "string" ? name.trim().slice(0, 80) : "";
+    if (!cleanName) {
+      acknowledge({ ok: false, error: "Enter a name for this snapshot." });
+      return;
+    }
+
+    const snapshot = {
+      id: crypto.randomUUID(),
+      name: cleanName,
+      savedAt: new Date().toISOString(),
+      students: JSON.parse(JSON.stringify(students)),
+      answerKey,
+    };
+
+    snapshots = [snapshot, ...snapshots];
+    try {
+      persistSnapshots();
+    } catch (error) {
+      snapshots = snapshots.filter((item) => item.id !== snapshot.id);
+      console.error("Could not persist test snapshot:", error);
+      acknowledge({ ok: false, error: "Snapshot could not be written to disk." });
+      return;
+    }
+
+    io.emit("snapshots-update", snapshots);
+    acknowledge({ ok: true, snapshot });
+    console.log(`Saved test snapshot: ${cleanName}`);
+  });
+
+  socket.on("delete-snapshot", ({ id } = {}, acknowledge = () => {}) => {
+    if (typeof id !== "string" || !id) {
+      acknowledge({ ok: false, error: "Invalid snapshot." });
+      return;
+    }
+
+    const existingSnapshot = snapshots.find((snapshot) => snapshot.id === id);
+    if (!existingSnapshot) {
+      acknowledge({ ok: false, error: "Snapshot not found. It may already have been deleted." });
+      return;
+    }
+
+    const previousSnapshots = snapshots;
+    snapshots = snapshots.filter((snapshot) => snapshot.id !== id);
+    try {
+      persistSnapshots();
+    } catch (error) {
+      snapshots = previousSnapshots;
+      console.error("Could not delete saved test snapshot:", error);
+      acknowledge({ ok: false, error: "Snapshot could not be deleted from disk." });
+      return;
+    }
+
+    io.emit("snapshots-update", snapshots);
+    acknowledge({ ok: true, id });
+    console.log(`Deleted test snapshot: ${existingSnapshot.name}`);
+  });
 
   /*
   ==============================
