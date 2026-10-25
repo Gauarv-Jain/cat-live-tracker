@@ -76,6 +76,27 @@ For a trusted home Wi-Fi, set the Windows network profile to **Private**:
 
 A safer long-term option is to leave the firewall enabled and allow **Node.js JavaScript Runtime** through Windows Firewall on **Private networks** only. This permits the app's frontend and backend connections without disabling the firewall.
 
+## Share the app with others using VS Code Port Forwarding
+
+Use this when people need to open the app through a public link instead of being on the same Wi-Fi as the computer running it.
+
+1. Start both the backend and frontend using the steps above. Keep both terminals running.
+2. In VS Code, open the **Ports** tab in the bottom panel—the same panel where the Terminal appears (the tab is usually toward the far right).
+3. If **Ports** is not visible, open the Command Palette with `Ctrl+Shift+P`, choose **View: Open View...**, search for **Ports**, and select it.
+4. In the Ports tab, click **Forward a Port** (or the **+** button) and enter **`5173`**. This is the frontend port used by this project.
+5. **Important: change the forwarded port's visibility to Public.** Right-click the row for port `5173`, open **Port Visibility**, and select **Public**. If you leave it private, other people may not be able to open the link.
+6. Copy the URL shown in the **Forwarded Address** column of the Ports tab and share it with your participants. They can open that link in their browser. To access the admin dashboard, append `?admin` to the end of the link (for example, `https://your-forwarded-address/?admin`).
+
+Leave the backend and frontend running while people use the link. The computer and VS Code session must remain available for the forwarded link to work. Forward only the frontend port `5173`; the app routes its live connection through the frontend to the backend on port `3001`.
+
+**Security note:** Port visibility set to **Public** means anyone with the link may be able to access the app. The admin dashboard does not have password protection, so share the admin URL only with people you trust.
+
+## Admin snapshots
+
+The admin dashboard's **Snapshots** menu lets you save the current results under a name, switch between saved results, and delete snapshots. A snapshot stores the student results and the answer key used when it was created, so changing the active answer key later should not change the scoring shown for that snapshot. Snapshots are persisted by the backend in `server/snapshots.json` on the computer running the server.
+
+When you change `server/answerKey.json`, restart the backend so it loads the new key. Snapshots created before answer-key storage was added may not contain their own answer key and can therefore display using the current key.
+
 ## Answer-key format
 
 The active key is `server/answerKey.json`. Answers are grouped by section and numbered locally inside each group. `_config.sectionOrder` controls display order; changing that array does not move the answers. `numbering` can be `restart` or `continuous`. Keep `legacyQuestionOrder` unchanged when changing display order if older saved sessions still need to be mapped.
