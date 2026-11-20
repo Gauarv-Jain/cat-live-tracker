@@ -1728,13 +1728,13 @@
                     const sectionName = btn.getAttribute('data-section');
                     
                     // Don't allow navigation to other sections until current section is submitted
-                    if (sectionName !== currentSection && !sectionSubmitted[currentSection]) {
+                    if (!solutionMode && sectionName !== currentSection && !sectionSubmitted[currentSection]) {
                         alert(`Please submit the ${currentSection} section before moving to another section.`);
                         return;
                     }
                     
                     // Don't allow navigation to submitted sections
-                    if (sectionSubmitted[sectionName]) {
+                    if (!solutionMode && sectionSubmitted[sectionName]) {
                         alert(`The ${sectionName} section has already been submitted.`);
                         return;
                     }
@@ -1743,12 +1743,12 @@
                     currentQuestionIndex = 0;
                     showQuestion(sectionName, currentQuestionIndex);
                     updateActiveSectionBtn(sectionName);
+                    updateSectionHeader(sectionName);
                     sidebar.classList.remove('open');
                     
                     // Start section timer if not already started
-                    if (!sectionSubmitted[sectionName]) {
+                    if (!solutionMode && !sectionSubmitted[sectionName]) {
                         startSectionTimer(sectionName);
-                        updateSectionHeader(sectionName);
                     }
                 });
             });
@@ -1760,13 +1760,13 @@
                     const questionIndex = parseInt(btn.getAttribute('data-question-index'));
                     
                     // Don't allow navigation to other sections until current section is submitted
-                    if (sectionName !== currentSection && !sectionSubmitted[currentSection]) {
+                    if (!solutionMode && sectionName !== currentSection && !sectionSubmitted[currentSection]) {
                         alert(`Please submit the ${currentSection} section before moving to another section.`);
                         return;
                     }
                     
                     // Don't allow navigation to submitted sections
-                    if (sectionSubmitted[sectionName]) {
+                    if (!solutionMode && sectionSubmitted[sectionName]) {
                         alert(`The ${sectionName} section has already been submitted.`);
                         return;
                     }
@@ -1775,6 +1775,7 @@
                     currentQuestionIndex = questionIndex;
                     showQuestion(sectionName, questionIndex);
                     updateActiveSectionBtn(sectionName);
+                    updateSectionHeader(sectionName);
                     sidebar.classList.remove('open');
                     
                     // Scroll to top of question
@@ -2044,7 +2045,7 @@
                 }
                 
                 // Disable buttons for submitted sections
-                if (sectionSubmitted[btn.getAttribute('data-section')]) {
+                if (sectionSubmitted[btn.getAttribute('data-section')] && !solutionMode) {
                     btn.classList.add('disabled');
                 } else {
                     btn.classList.remove('disabled');
@@ -2065,7 +2066,7 @@
                 }
                 
                 // Disable buttons for submitted sections
-                if (sectionSubmitted[btnSection]) {
+                if (sectionSubmitted[btnSection] && !solutionMode) {
                     btn.classList.add('disabled');
                 } else {
                     btn.classList.remove('disabled');
@@ -2344,6 +2345,7 @@
             
             // Show question with solutions
             showQuestion(currentSection, currentQuestionIndex);
+            updateActiveSectionBtn(currentSection);
             
             // Update navigation buttons
             updateNavButtons(currentSection, currentQuestionIndex);
