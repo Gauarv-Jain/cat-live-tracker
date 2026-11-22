@@ -5,7 +5,7 @@ import App from './App.jsx'
 import Admin from './Admin.jsx'
 
 const params = new URLSearchParams(window.location.search)
-const isAdmin = params.has('admin')
+const isAdmin = params.has('adminne')
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
